@@ -37,12 +37,12 @@ int main(int argc, char* argv[]) {
     const double b = M_PI;
 
     // Computing the step between two bins
-    double step = (b - a) / N;
+    const double step = (b - a) / N;
     
     // Compute the Simpson numerical integration: first, the parts in the middle of the bin
     // I define a new starting point in the middle of the first bin, does this make sense? (less addition vs. more variables)?
     double sum = 0;
-    double a_new = a + step / 2;
+    const double a_new = a + step / 2;
     for(int i = 0; i < N ; ++i){
         sum += func(a_new + i * step);
         }
