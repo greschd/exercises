@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
     }
     // Checking the boundary value for double
     if(double(1) + double(1) == double(1)){
-        std::cout << "Your computer is really bad.. tough luck :(" << std::endl;
+        std::cout << "I don't think this even qualifies as a computer" << std::endl;
     }
     
     // Computing epsilon for type float
