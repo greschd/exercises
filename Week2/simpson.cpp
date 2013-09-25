@@ -1,14 +1,63 @@
 // Author:  Dominik Gresch <greschd@phys.ethz.ch>
 // Date:    25.09.2013 13:20:35 CEST
 // File:    simpson.cpp
-// PRE:     Input is a natural number N giving the number of bins (0,Pi) 
+// PRE:     Input is a non-zero natural number N giving the number of bins (0,Pi) 
 //          will be split into
 // POST:    Output is the integral over (0,Pi) of sin(x) the using the
-//          Simpson integration rule over Nbins.
+//          Simpson integration rule over N bins.
 
 #include <iostream>
+#include <math.h>
+#include <assert.h>
+
+double func(double x){
+    return sin(x);
+}
 
 int main(int argc, char* argv[]) {
-    std::cout << "How "
+    
+    // Input of the number of bins N
+    std::cout << "How many bins would you like to use?" << std::endl;
+    int N;
+    std::cin >> N;
+    assert(N > 0);   // I didn't want to use unsigned int because a small negative input would produce huge N
+    
+    // Optional input of different integration limits (un-comment to use)
+    std::cout << "What is the lower integration limit?" << std::endl;
+    double a;
+    std::cin >> a;
+    
+    std::cout << "What is the upper integration limit?" << std::endl;
+    double b;
+    std::cin >> b;
+    assert(b>a);
+    
+    // Standard integration limits (comment when using different ones)
+    // const double a = 0;
+    // const double b = M_PI;
+
+    // Computing the step between two bins
+    double step = (b - a) / N;
+    
+    // Compute the Simpson numerical integration: first, the parts in the middle of the bin
+    // I define a new starting point in the middle of the first bin, does this make sense? (less addition vs. more variables)?
+    double sum = 0;
+    double a_new = a + step / 2;
+    for(int i = 0; i < N ; ++i){
+        sum += func(a_new + i * step);
+        }
+    sum *= 2; 
+    
+    // Now, the rest
+    for(int j = 0; j <= N; ++j){
+        sum += func(a + j * step);
+        }
+    
+    // func(a) and func(b) have been added too much
+    sum -= (func(a) + func (b)) / 2;
+    
+    // Output and adding the prefactor step / 3
+    std::cout << "The integral from " << a << " to " <<  b << " is = " << sum * step / 3 << std::endl; 
+    
     return 0;
 }
