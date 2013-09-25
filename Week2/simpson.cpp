@@ -23,18 +23,18 @@ int main(int argc, char* argv[]) {
     assert(N > 0);   // I didn't want to use unsigned int because a small negative input would produce huge N
     
     // Optional input of different integration limits (un-comment to use)
-    std::cout << "What is the lower integration limit?" << std::endl;
-    double a;
-    std::cin >> a;
-    
-    std::cout << "What is the upper integration limit?" << std::endl;
-    double b;
-    std::cin >> b;
-    assert(b>a);
+    // std::cout << "What is the lower integration limit?" << std::endl;
+    // double a;
+    // std::cin >> a;
+    // 
+    // std::cout << "What is the upper integration limit?" << std::endl;
+    // double b;
+    // std::cin >> b;
+    // assert(b>a);
     
     // Standard integration limits (comment when using different ones)
-    // const double a = 0;
-    // const double b = M_PI;
+    const double a = 0;
+    const double b = M_PI;
 
     // Computing the step between two bins
     double step = (b - a) / N;
@@ -48,13 +48,13 @@ int main(int argc, char* argv[]) {
         }
     sum *= 2; 
     
-    // Now, the rest
-    for(int j = 0; j <= N; ++j){
+    // Adding the rest, except the boundaries
+    for(int j = 1; j < N; ++j){
         sum += func(a + j * step);
         }
     
-    // func(a) and func(b) have been added too much
-    sum -= (func(a) + func (b)) / 2;
+    // Adding the boundaries
+    sum += (func(a) + func (b)) / 2;
     
     // Output and adding the prefactor step / 3
     std::cout << "The integral from " << a << " to " <<  b << " is = " << sum * step / 3 << std::endl; 
