@@ -18,8 +18,14 @@ int main(int argc, char* argv[]) {
         std::cin >> in;
         if(in == "end") 
             break;
-        a.push_back(stod(in));
+        a.push_back(stod(in)); // The program will crash for strange inputs, since I don't know how to catch the exception yet.
         sum += a.back();
+    }
+    
+    // give error message if sum == 0
+    if(sum == 0) {
+        std::cout << "The array cannot be normalised since the sum of the elements is zero." << std::endl;
+        return 0;
     }
     
     const uint n = a.size();

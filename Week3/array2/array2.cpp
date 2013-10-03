@@ -16,8 +16,14 @@ int main(int argc, char* argv[]) {
     double sum = 0;
     std::cout << "Which numbers would you like to put in?" << std::endl;
     for(uint i = 0; i < n; ++i) {
-        std::cin >> a[i];
+        std::cin >> a[i]; // Non - numeric input will be converted to 0.
         sum += a[i];
+    }
+
+    // give error message if sum == 0
+    if(sum == 0) {
+        std::cout << "The array cannot be normalised since the sum of the elements is zero." << std::endl;
+        return 0;
     }
     
     // normalising the array
