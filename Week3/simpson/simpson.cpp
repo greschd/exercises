@@ -1,8 +1,10 @@
 // Author:  Dominik Gresch <greschd@phys.ethz.ch>
 // Date:    25.09.2013 13:20:35 CEST
 // File:    simpson.cpp
-// PRE:     Input is a non-zero natural number N giving the number of bins (0,Pi) will be split into
-// POST:    Output is the integral over (0,Pi) of sin(x) using the Simpson integration rule over N bins.
+// PRE:     Input:      A function pointer on a function taking a double and returning a double
+//                      2 doubles a, b
+//                      An integer N > 0.
+// POST:    Output is the integral over (a,b) of the function using the Simpson integration rule over N bins.
 
 #include <iostream>
 #include <math.h>
@@ -13,8 +15,11 @@ double simpson(double (*func)(double), double a, double b, int N){
 
     // asserting valid function parameters 
     assert(N > 0);   // I didn't want to use unsigned int because a small negative input would produce huge N
-    assert(b > a);
-
+    
+    // Handle the case a == b
+    if(a == b)
+        return 0;
+    
     // Computing the step between two bins
     const double step = (b - a) / N;
     
