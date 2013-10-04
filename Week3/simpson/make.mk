@@ -1,7 +1,7 @@
 main : main.o libintegrate.a
 	c++ -Wall -std=c++11 $< -L. -lintegrate -o $@
 
-%.o : %.cpp %.hpp.gtc
+%.o : %.cpp %.hpp.gch
 	c++ -c -Wall -std=c++11 $< 
 
 libintegrate.a : simpson.o
