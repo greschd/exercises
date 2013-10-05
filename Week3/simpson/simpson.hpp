@@ -4,7 +4,7 @@
 
 // Function:Simpson
 // PRE:     Input:      A function pointer on a function taking a double and returning a double
-//                      2 doubles a, b
+//                      2 doubles a, b 
 //                      An integer N > 0.
 // POST:    Output is the integral over (a,b) of the function using the Simpson integration rule over N bins.
 // Depends on:          libraries iostream, math.h, assert.h
@@ -12,6 +12,6 @@
 #ifndef __SIMPSON_HEADER
 #define __SIMPSON_HEADER
 
-double simpson(double (*)(double), double, double, int);
+double simpson(double (*)(double),const double &,const double &,const int &);
 
 #endif //__SIMPSON_HEADER
