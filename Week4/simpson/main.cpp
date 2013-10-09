@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "simpsonsquare.hpp"
-#include <>
+#include "../timer/dg_timer.hpp"
 
 int main(int argc, char* argv[]) {
     
