@@ -38,7 +38,7 @@ private:
 };
 
 std::ostream & operator<<(std::ostream & os, dg_timer_class const & arg) {
-    os << "The time that has passed is " << arg.read();
+    os << "The time that has passed is " << arg.read() << " seconds. ";
     return os;
 }
 
