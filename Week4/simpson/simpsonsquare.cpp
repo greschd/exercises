@@ -11,7 +11,7 @@
 #include <assert.h>
 #include "simpsonsquare.hpp"
 
-double simpson(const double & a,const double & b,const int & N){
+double simpsonsquare(const double & a,const double & b,const int & N){
 
     // asserting valid function parameters 
     assert(N > 0);   // I didn't want to use unsigned int because a small negative input would produce huge N

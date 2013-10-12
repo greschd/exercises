@@ -11,6 +11,6 @@
 #ifndef __SIMPSONSQUARE_HEADER
 #define __SIMPSONSQUARE_HEADER
 
-double simpson(const double &,const double &,const int &);
+double simpsonsquare(const double &,const double &,const int &);
 
 #endif //__SIMPSONSQUARE_HEADER

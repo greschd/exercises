@@ -15,13 +15,14 @@
 
 template <class type>
 void inputtovector (const std::string & input, std::vector<type> & vector) {
+    // reading the input file into the ifstream is
     std::ifstream is;
     is.open(input);
-    if (is.is_open()) {
+    if (is.is_open()) { // checking if opening the file has worked
         double in;
-        while(is.eof() == false){
+        while(is.eof() == false){ // checking if the end of file has been reached
            is >> in;
-           vector.push_back(in);
+           vector.push_back(in); // appending the input to the vector
        }
     }
     else std::cout << "unable to open input file" << std::endl;
