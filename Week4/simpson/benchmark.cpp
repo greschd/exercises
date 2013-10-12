@@ -16,28 +16,43 @@
 int main(int argc, char* argv[]) {
     
     // loading the number(s) of bins from input.txt into the vector bins
-    std::vector<int> bins;
-    inputtovector<int>("input.txt", bins);
+    // Un-comment this part if you want to put in the number of bins from an input file.
+    //~ std::vector<int> bins;
+    //~ inputtovector<int>("input.txt", bins);
+    
+    // Creating the vector containing the number of bins 
+    // Comment this part if you want to put in the number of bins from an input file.
+    std::vector<int> bins(139);
+    for(uint i = 0; i < 9 ; ++i) {
+        bins.at(i) = i + 1;
+    }
+    for(uint i = 9; i < 109; ++i) {
+        bins.at(i) = 10 * (i - 8);
+    }
+    for(uint i = 109; i < 139; ++i) {
+        bins.at(i) = 1000 * (i - 108);
+    }
 
-    // creating the vectors used to save the times and results
+    // creating the vectors used to save the times 
     uint n = bins.size();
     std::vector<double> times(n);
-    std::vector<double> results(n);
 
-    // timing the simpsonsquare function (integration range (0,10))
+    // timing the simpsonsquare function (integration range (0,10)). 
     for(uint i = 0; i < n; ++i) {
         timer.start();
-        results.at(i) = simpsonsquare(0, 10, bins.at(i));
+        for(uint j = 0; j < 1000; ++j) {
+            simpsonsquare(0, 10, bins.at(i));
+        }
         timer.stop();
-        times.at(i) = timer.read();
+        times.at(i) = timer.read() / 1000;
     }
     
     std::ofstream os;
     os.open("output.txt");
-    os << "bins time result" << std::endl; 
+    os << "bins time" << std::endl; 
     if (os.is_open()){
         for(uint i = 0; i < n; ++i) {
-            os << bins.at(i) << " " << times.at(i) << " " << results.at(i) << std::endl;
+            os << bins.at(i) << " " << times.at(i) << std::endl;
         }
     }
     else std::cout << "Could not open output file." << std::endl;
