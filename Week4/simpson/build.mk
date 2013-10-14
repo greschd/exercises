@@ -1,5 +1,6 @@
 COMPILER = c++
 FLAGS = -Wall -std=c++11
+PYTHON = python
 
 benchmark.x : benchmark.o simpsonsquare.o 
 	$(COMPILER) $(FLAGS) $< simpsonsquare.o -o $@

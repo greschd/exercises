@@ -7,11 +7,11 @@ PYTHON = python
 allplots : plot-1.pdf plot-2.pdf plot-3.pdf plot-4.pdf plot-5.pdf plot-6.pdf plot-7.pdf plot-8.pdf  
 .SECONDARY : output-1.txt output-2.txt output-3.txt output-4.txt output-5.txt output-6.txt output-7.txt output-8.txt  
 
-plot-%.pdf : plot-%.py output-%.txt
+plot-%.pdf : plot-%.py output-1.txt #since all of the output files are created at the same time, one can use the first one as representative
 	$(PYTHON) $<
 
-output-%.txt : var-%.txt cache.x
-	./cache.x < $<
+output-1.txt : cache.x
+	./cache.x 
 
 cache.x : cache.o arrayloop.o 
 	$(COMPILER) $(FLAGS) $^ -o $@
