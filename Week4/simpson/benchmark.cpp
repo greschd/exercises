@@ -11,7 +11,7 @@
 #include <vector>
 #include "simpsonsquare.hpp"
 #include "../timer/dg_timer.hpp" // uses the variable name "timer"
-#include "../input/inputtovector.hpp"
+//~ #include "../input/inputtovector.hpp"  // Un - comment if you want to use an input file for the number of bins
 
 int main(int argc, char* argv[]) {
     
@@ -47,6 +47,7 @@ int main(int argc, char* argv[]) {
         times.at(i) = timer.read() / 1000;
     }
     
+    // Output into output.txt
     std::ofstream os;
     os.open("output.txt");
     os << "bins time" << std::endl; 
