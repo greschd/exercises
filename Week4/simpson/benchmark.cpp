@@ -11,17 +11,10 @@
 #include <vector>
 #include "simpsonsquare.hpp"
 #include "../timer/dg_timer.hpp" // uses the variable name "timer"
-//~ #include "../input/inputtovector.hpp"  // Un - comment if you want to use an input file for the number of bins
 
 int main(int argc, char* argv[]) {
     
-    // loading the number(s) of bins from input.txt into the vector bins
-    // Un-comment this part if you want to put in the number of bins from an input file.
-    //~ std::vector<int> bins;
-    //~ inputtovector<int>("input.txt", bins);
-    
     // Creating the vector containing the number of bins 
-    // Comment this part if you want to put in the number of bins from an input file.
     std::vector<int> bins(139);
     for(uint i = 0; i < 9 ; ++i) {
         bins.at(i) = i + 1;
@@ -50,10 +43,10 @@ int main(int argc, char* argv[]) {
     // Output into output.txt
     std::ofstream os;
     os.open("output.txt");
-    os << "bins time" << std::endl; 
+    os << "bins time_per_bin" << std::endl; 
     if (os.is_open()){
         for(uint i = 0; i < n; ++i) {
-            os << bins.at(i) << " " << times.at(i) << std::endl;
+            os << bins.at(i) << " " << times.at(i) / bins.at(i) << std::endl;
         }
     }
     else std::cout << "Could not open output file." << std::endl;
