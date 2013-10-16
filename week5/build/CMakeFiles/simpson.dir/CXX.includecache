@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/greschd/programming/ProgTech/exercise/week5/simpson/main.cpp
+iostream
+-
+simpson.hpp
+/home/greschd/programming/ProgTech/exercise/week5/simpson/simpson.hpp
+math.h
+-
+
+/home/greschd/programming/ProgTech/exercise/week5/simpson/simpson.cpp
+iostream
+-
+math.h
+-
+assert.h
+-
+simpson.hpp
+/home/greschd/programming/ProgTech/exercise/week5/simpson/simpson.hpp
+
+/home/greschd/programming/ProgTech/exercise/week5/simpson/simpson.hpp
+
