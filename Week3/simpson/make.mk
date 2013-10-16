@@ -1,8 +1,11 @@
-main : main.o libintegrate.a
-	c++ -Wall -std=c++11 $< -L. -lintegrate -o $@
+COMPILER = c++
+FLAGS = -Wall -std=c++11
+
+main.x : main.o libintegrate.a
+	$(COMPILER) $(FLAGS) $< -L. -lintegrate -o $@
 
 %.o : %.cpp simpson.hpp
-	c++ -c -Wall -std=c++11 $< 
+	$(COMPILER) -c $(FLAGS) $< 
 
 libintegrate.a : simpson.o
 	ar ruc $@ $^
