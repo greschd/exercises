@@ -1,3 +1,4 @@
 cmake_minimum_required (VERSION 2.6)
 project(simpson)
-add_executable(simpson main.cpp simpson.cpp)
+include_directories("${PROJECT_SOURCE_DIR}/src")
+add_executable(simpson src/main.cpp src/simpson.cpp)
