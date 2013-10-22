@@ -26,4 +26,3 @@ int main(int argc, char* argv[]) {
     std::cout << "The Simpson integral of sin(x) from " << a << " to " << b << " using " << N << " bins is = " << simpson(sin,a,b,N) << std::endl;
     return 0;
 }
-//TEST
