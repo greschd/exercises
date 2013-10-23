@@ -22,7 +22,7 @@ namespace progtech{
 class Timer {
 public:
     
-    dg_timer_class(): t1(CLOCKTYPE::now()), t2(CLOCKTYPE::now()){
+    Timer(): t1(CLOCKTYPE::now()), t2(CLOCKTYPE::now()){
     }
     
     operator double() const {

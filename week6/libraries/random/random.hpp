@@ -2,7 +2,7 @@
 // Date:    23.10.2013 01:36:13 CEST
 // File:    random.hpp
 
-// Defines: class dg_random_gen, which will create linear congruential random number generator 
+// Defines: class Generator, which will create linear congruential random number generator 
 //          X_n+1 = (a * X_n + c) mod m; with m = 4294967296, a = 1664525, c = 1013904223;
 //          The seed X_0 is the value with which the generator is initialized
 //          The type in which all the calculations are done is long unsigned int
@@ -19,44 +19,38 @@
 #ifndef __RANDOM_HEADER
 #define __RANDOM_HEADER
 
-class dg_random_gen {
-    
-public:
+namespace dg_random
+{
 
-    dg_random_gen() : rand(0) {
-    }
 
-    dg_random_gen(long unsigned int s0) : rand(s0) {
-    }
-    
-    unsigned int current() {
-        return rand;
-    }
-    
-    void iterate() {
-        rand = (a * rand + c) % m;
-    }
-    
-    long unsigned int generate() {
-        iterate();
-        return rand;
-    }
-    
-    double currentsmall() {
-        return double(rand) / double (m);
-    }
-    
-    double generatesmall() {
-        iterate();
-        return double(rand) / double (m);
-    }
-    
-private:
+    class Generator {
+        using ulong = long unsigned int;
+        
+    public:
 
-    long unsigned int rand;
-    long unsigned int m = 4294967296;
-    long unsigned int a = 1664525;
-    long unsigned int c = 1013904223;
-};
+        Generator(ulong const & x0 = 0) : xc(x0) {
+        }
+        
+        ulong operator ()() {
+            return xc = (a * xc + c) % m;
+        }
+        
+        static ulong const & max() {
+            return m;
+        }
+        
+    private:
+
+        ulong xc;
+        
+        static ulong const m;
+        static ulong const a; 
+        static ulong const c;
+    };
+    
+    ulong const Generator::m(4294967296);
+    ulong const Generator::a(1664525);
+    ulong const Generator::c(1013904223);
+}
 
 #endif //__RANDOM_HEADER

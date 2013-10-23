@@ -7,10 +7,8 @@
 
 int main(int argc, char* argv[]) {
     
-    dg_random_gen a (1221341);
-    for(uint i = 0; i < 10000; ++i) {
-    std::cout << a.generatesmall() << std::endl;
-    }
+    dg_random::Generator rnd(42);
+    std::cout << dg_random::Generator::max() << std::endl;
     
     return 0;
 }
