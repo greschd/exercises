@@ -19,11 +19,13 @@
 // (to generate mutations in the copying of the genome)
 
 // setage(n): set the age of the animal to n
-//  readage(): reads the age of the animal
+// readage(): reads the age of the animal
 // older(): increments the age of the animal by one and updates the state of sickness (+1 if the corresponding gene is true)
 
 // readsick(): reads the state of sickness
 // setsick(n): set the state of sickness to n
+
+// gene(): reads the genome of the animal
 
 /*------------------------------*/
 /*           GENOME:            */
