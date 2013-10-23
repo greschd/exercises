@@ -1,24 +1,25 @@
 // Author:  Dominik Gresch <greschd@phys.ethz.ch>
 // Date:    09.10.2013 15:52:55 CEST
-// File:    dg_timer.hpp
+// File:    timer.hpp
 
-// Defines: class dg_timer_class, operator overload of <<, variable timer (of type dg_timer_class)
-//          MEMBER FUNCTIONS (dg_timer_class):
+// Defines: class progtech::Timer, operator overload of <<
+//          MEMBER FUNCTIONS (Timer):
 //          constructor, no arguments: time passed will be 0
 //          start():    starts time measurement
 //          stop():     stops time measurement
-//          read():     gives the time passed between start() and stop(), in seconds (as double)
+//          duration():     gives the time passed between start() and stop(), in seconds (as double)
 //          
 //          operator << :   "<< var" puts var.read() in the output stream (var of class dg_timer_class)
 
-#ifndef __DG_TIMER_HEADER
-#define __DG_TIMER_HEADER
+#ifndef __TIMER_HEADER
+#define __TIMER_HEADER
 
 #include <iostream>
 #include <chrono>
 #define CLOCKTYPE std::chrono::high_resolution_clock
 
-class dg_timer_class {
+namespace progtech{
+class Timer {
 public:
     
     dg_timer_class(): t1(CLOCKTYPE::now()), t2(CLOCKTYPE::now()){
@@ -36,7 +37,7 @@ public:
         t2 = CLOCKTYPE::now();
     }
     
-    double read() const {
+    double duration() const {
         return std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1).count();
     }
     
@@ -46,11 +47,10 @@ private:
     std::chrono::time_point<CLOCKTYPE> t2;
 };
 
-std::ostream & operator<<(std::ostream & os, dg_timer_class const & arg) {
-    os << "The time that has passed is " << arg.read() << " seconds. ";
+std::ostream & operator<<(std::ostream & os, Timer const & arg) {
+    os << "The time that has passed is " << arg.duration() << " seconds. ";
     return os;
 }
+}
 
-dg_timer_class timer;
-
-#endif //__DG_TIMER_HEADER
+#endif //__TIMER_HEADER
