@@ -2,6 +2,15 @@
 // Date:    09.10.2013 15:52:55 CEST
 // File:    dg_timer.hpp
 
+// Defines: class dg_timer_class, operator overload of <<, variable timer (of type dg_timer_class)
+//          MEMBER FUNCTIONS (dg_timer_class):
+//          constructor, no arguments: time passed will be 0
+//          start():    starts time measurement
+//          stop():     stops time measurement
+//          read():     gives the time passed between start() and stop(), in seconds (as double)
+//          
+//          operator << :   "<< var" puts var.read() in the output stream (var of class dg_timer_class)
+
 #ifndef __DG_TIMER_HEADER
 #define __DG_TIMER_HEADER
 
