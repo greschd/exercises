@@ -32,8 +32,8 @@ public:
     using length_t = int;
 
     genome_class();                     // Default constructor
-    genome_class(genome_class);         // Copy constructor
-    genome_class(genome_class, bool);    // Copy constructor with optional mutation
+    genome_class(genome_class const &);         // Copy constructor
+    genome_class(genome_class const &, bool);   // Copy constructor with optional mutation
     
     void set(length_t k, gene_t b);
     

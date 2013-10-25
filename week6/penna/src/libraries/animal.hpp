@@ -13,8 +13,8 @@
 // MEMBER FUNCTIONS:
 
 // constructor: default values are age = year + 2, sickness = 0, genome with default genome value (all false). 
-// input can be an initial age (to be set to T+2), a parent (from whom the genome will be copied) and a mutation rate (double m)
-// (to generate mutations in the copying of the genome)
+// input can be an initial age (to be set to T+2), a parent (from whom the genome will be copied)
+// mutation from the parent can be turned on or off via boolean
 
 // setage(n): set the age of the animal to n
 // readage(): reads the age of the animal
@@ -39,7 +39,10 @@ public:
     using sick_t = int;
     using year_t = int;
     
-    animal_class() : age(year_t = environment_class::year + 2), sick(sick_t = 0), genome(genome_class = genome_class());
+    animal_class();
+    
+    animal_class(animal_class const &);         // copy constructor
+    animal_class(animal_class const &, bool);   // copy constructor with optional mutation
     
     void setage(age_t);
     
