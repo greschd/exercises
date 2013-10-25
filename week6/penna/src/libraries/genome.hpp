@@ -28,22 +28,24 @@
 
 class genome_class {
 public:
+    using gene_t = bool;
+    using length_t = int;
 
     genome_class();                     // Default constructor
     genome_class(genome_class);         // Copy constructor
-    genome_class(genome_class,bool);    // Copy constructor with optional mutation
+    genome_class(genome_class, bool);    // Copy constructor with optional mutation
     
-    void set(int k, bool b);
+    void set(length_t k, gene_t b);
     
-    bool read(int k);
+    bool read(length_ k);
     
     void mutate;
     
-    void setgenomelength(int n);
+    void setgenomelength(length_t n);
 
 private:
-    static int const genomelength;
-    std::vector<bool> genes;
+    static length_t const genomelength;
+    std::vector<gene_t> genome;
     
 };
 

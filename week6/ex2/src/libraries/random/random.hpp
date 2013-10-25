@@ -19,29 +19,27 @@
 #ifndef __RANDOM_HEADER
 #define __RANDOM_HEADER
 
-namespace dg_random
-{
-
+namespace progtech { namespace random {
 
     class Generator {
-        using ulong = long unsigned int;
+        using rantom_t = long unsigned int;
         
     public:
 
-        Generator(ulong const & = 0);
+        Generator(rantom_t const & = 0);
         
-        ulong operator ()();
+        rantom_t operator ()();
         
-        static ulong const & max();
+        static rantom_t const & max();
         
     private:
 
-        ulong xc;
+        rantom_t xc;
         
-        static ulong const m;
-        static ulong const a; 
-        static ulong const c;
+        static rantom_t const m;
+        static rantom_t const a; 
+        static rantom_t const c;
     };
-}
+}}
 
 #endif //__RANDOM_HEADER

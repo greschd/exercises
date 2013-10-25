@@ -12,12 +12,12 @@ int main() {
     const int N = 1000000000;
     
     Timer t;
-    dg_random::Generator rnd(42);
+    random::Generator rnd(42);
     double s;
     
     t.start();
     for (int n=0; n<N; ++n)
-        s += static_cast<double>( rnd() ) / dg_random::Generator::max();
+        s += static_cast<double>( rnd() ) / random::Generator::max();
     t.stop();
     
     s /= N;

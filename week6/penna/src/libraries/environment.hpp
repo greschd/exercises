@@ -20,20 +20,22 @@
 class environment_class {
     
 public:
+    using year_t = int;
+    using mut_t = double;
 
-friend class animal_class;
-friend class genome_class;
+    void nextyear();
 
-void nextyear();
+    void setyear(year_t = 0);
 
-void setyear(int = 0);
-
-void setmrate(double = 0);
+    void setmrate(mut_t = 0);
 
 private:
     
-static int year;
-static double mrate;
+    static year_t year;
+    static mut_t mrate;
+
+    friend class animal_class;
+    friend class genome_class;
     
 };
 

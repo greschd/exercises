@@ -21,16 +21,19 @@
 
 namespace progtech{
 class Timer {
+    
+    using time_t = double;
+    
 public:
     Timer();
     
-    operator double() const;
+    operator time_t() const;
     
     void start();
     
     void stop();
     
-    double duration() const;
+    time_t duration() const;
 private:
     std::chrono::time_point<CLOCKTYPE> t1;
     std::chrono::time_point<CLOCKTYPE> t2;

@@ -5,22 +5,23 @@
 #include <iostream>
 #include <random/random.hpp>
 
-namespace dg_random{
-using ulong = long unsigned int;
+namespace progtech { namespace random {
+    
+using rantom_t = long unsigned int;
 
-Generator::Generator(ulong const & x0) : xc(x0) {
+Generator::Generator(rantom_t const & x0) : xc(x0) {
 }
 
-ulong Generator::operator ()() {
+rantom_t Generator::operator ()() {
     return xc = (a * xc + c) % m;
 }
 
-ulong const & Generator::max() {
+rantom_t const & Generator::max() {
     return m;
 }
 
-ulong const Generator::m(4294967296);
-ulong const Generator::a(1664525);
-ulong const Generator::c(1013904223);
+rantom_t const Generator::m(4294967296);
+rantom_t const Generator::a(1664525);
+rantom_t const Generator::c(1013904223);
 
-}
+}}

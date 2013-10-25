@@ -34,26 +34,31 @@
 class animal_class {
 
 public:
-    friend environment_class
     
-    animal_class : age(int = environment_class::year + 2), sick(int = 0), gene(genome_class = genome_class(std));
+    using age_t = int;
+    using sick_t = int;
+    using year_t = int;
     
-    void setage(int);
+    animal_class : age(year_t = environment_class::year + 2), sick(sick_t = 0), genome(genome_class = genome_class());
     
-    int readage();
+    void setage(age_t);
+    
+    age_t readage();
     
     void older();
     
-    int readsick();
+    sick_t readsick();
     
     void sicken();
     
-    genome_class readgene();
+    genome_class readgenome();
     
 private:
-    int age;
-    int sick;
-    genome_class gene;
+    age_t age;
+    sick_t sick;
+    genome_class genome;
+    
+    friend environment_class
 };
 
 #endif //__ANIMAL_HEADER
