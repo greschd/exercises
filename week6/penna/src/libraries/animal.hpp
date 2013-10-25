@@ -39,7 +39,7 @@ public:
     using sick_t = int;
     using year_t = int;
     
-    animal_class : age(year_t = environment_class::year + 2), sick(sick_t = 0), genome(genome_class = genome_class());
+    animal_class() : age(year_t = environment_class::year + 2), sick(sick_t = 0), genome(genome_class = genome_class());
     
     void setage(age_t);
     

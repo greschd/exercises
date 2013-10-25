@@ -22,23 +22,23 @@
 namespace progtech { namespace random {
 
     class Generator {
-        using rantom_t = long unsigned int;
+        using random_t = uint32_t; // if you change this you need to put the modulo back in 
         
     public:
 
-        Generator(rantom_t const & = 0);
+        Generator(random_t const & = 0);
         
-        rantom_t operator ()();
+        random_t operator ()();
         
-        static rantom_t const & max();
+        static random_t const & max();
         
     private:
 
-        rantom_t xc;
+        random_t xc;
         
-        static rantom_t const m;
-        static rantom_t const a; 
-        static rantom_t const c;
+        static random_t const m;
+        static random_t const a; 
+        static random_t const c;
     };
 }}
 
