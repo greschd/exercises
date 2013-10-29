@@ -16,12 +16,10 @@
 
 #include <iostream>
 #include <chrono>
-#define CLOCKTYPE std::chrono::high_resolution_clock
-
 
 namespace progtech{
 class Timer {
-    
+    typedef std::chrono::high_resolution_clock clock_type; // do not use #define for typedefs.
     using time_t = double;
     
 public:
@@ -35,8 +33,8 @@ public:
     
     time_t duration() const;
 private:
-    std::chrono::time_point<CLOCKTYPE> t1;
-    std::chrono::time_point<CLOCKTYPE> t2;
+    std::chrono::time_point<clock_type> t1;
+    std::chrono::time_point<clock_type> t2;
 };
 }    
 #endif //__TIMER_HEADER

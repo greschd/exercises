@@ -5,11 +5,10 @@
 #include <iostream>
 #include <chrono>
 #include <timer/timer.hpp>
-#define CLOCKTYPE std::chrono::high_resolution_clock
 
 namespace progtech{
 
-Timer::Timer(): t1(CLOCKTYPE::now()), t2(CLOCKTYPE::now()){
+Timer::Timer(): t1(clock_type::now()), t2(clock_type::now()){
 }
 
 using time_t = double;
@@ -19,11 +18,11 @@ Timer::operator time_t() const {
 }
 
 void Timer::start() {
-    t1 = CLOCKTYPE::now();
+    t1 = clock_type::now();
 }
 
 void Timer::stop() {
-    Timer::t2 = CLOCKTYPE::now();
+    Timer::t2 = clock_type::now();
 }
 
 time_t Timer::duration() const {
