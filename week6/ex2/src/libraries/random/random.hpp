@@ -30,7 +30,7 @@ namespace progtech { namespace random {
         
         random_t operator ()();
         
-        static random_t const & max();
+        static random_t max();
         
     private:
 

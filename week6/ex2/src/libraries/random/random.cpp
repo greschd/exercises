@@ -17,7 +17,7 @@ namespace progtech { namespace random {
         return xc = (a * xc + c);
     }
 
-    random_t const & Generator::max() {
+    random_t Generator::max() {
         return random_t(-1);
     }
 
