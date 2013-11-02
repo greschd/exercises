@@ -11,9 +11,13 @@ namespace Penna {
         Animal::bad_threshold_ = t;
     }
     
+    age_type Animal::bad_threshold_(0); // setting the threshold to 0 unless otherwise specified
+    
     void Animal::set_maturity_age( age_type r ) {
         Animal::maturity_age_ = r;
     }
+    
+    age_type Animal::maturity_age_(0); // Setting R to 0 if nothing else is specified
     
     // Default constructor: Uses all good genome.
     Animal::Animal(): gen_(), age_(0) {}
@@ -23,8 +27,9 @@ namespace Penna {
 
     // I choose the first gene to be evaluated at age 0 (not 1)
     // and the Animal to die when the threshold is surpassed (not at the threshold)
+    // or when it surpasses the maximum age (i.e. age = number_of_genes_)
     bool Animal::is_dead() const {  
-        return (gen_.count_bad(age_) > bad_threshold_);
+        return (gen_.count_bad(age_) > bad_threshold_) || (age_ >= Genome::number_of_genes);
     }
     
     bool Animal::is_mature() const {
@@ -38,9 +43,7 @@ namespace Penna {
     
     // Create a baby animal inheriting its genome from this except for some random mutations.
     Animal Animal::give_birth() const {
-        Animal baby(gen_);
-        baby.gen_.mutate();
+        Animal baby(gen_.mutate());
         return baby;
     }
-    
 }

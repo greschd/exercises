@@ -1,7 +1,7 @@
 #ifndef ANIMAL_HPP
 #define ANIMAL_HPP
 
-#include "genome.hpp"
+#include <genome.hpp>
 
 namespace Penna
 {
@@ -32,9 +32,9 @@ public:
     Animal give_birth() const;
 
 private:
-    // Number of bad genes an animal can tolerate. Parameter T in Penna's paper.
+    // Number of bad genes an animal can tolerate. Parameter T in Penna's paper. (Standard: 0)
     static age_type bad_threshold_;
-    // Maturity age. Parameter R in Penna's paper.
+    // Maturity age. Parameter R in Penna's paper. (Standard: 0)
     static age_type maturity_age_;
 
     Genome gen_;
