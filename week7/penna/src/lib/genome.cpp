@@ -20,7 +20,12 @@ namespace Penna
     
     // Check if i'th gene is bad. (index starts at 0)
     bool Genome::is_bad(age_type i) const {
-        return genes_.test(i);
+        if(i >= number_of_genes) {
+            return 0;
+        }
+        else {
+            return genes_.test(i);
+        }
     }
     
     // Count number of bad genes in first n years. (index starts at 0)

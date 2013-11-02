@@ -41,4 +41,3 @@ int main(int argc, char* argv[]) {
     std::cout << "In " << reps << " mutated genomes, the measured flipping rate is " << double(count) / (reps * Genome::number_of_genes) 
     << " when the mutation probability is set to 1/2 * number_of_genes" << std::endl << std::endl;
 }
-
