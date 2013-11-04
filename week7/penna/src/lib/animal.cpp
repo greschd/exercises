@@ -29,7 +29,7 @@ namespace Penna {
     // and the Animal to die when the threshold is surpassed (not at the threshold)
     // or when it surpasses the maximum age (i.e. age = number_of_genes_)
     bool Animal::is_dead() const {  
-        return (gen_.count_bad(age_ + 1) > bad_threshold_) || (age_ >= Genome::number_of_genes);
+        return (gen_.count_bad(age_) > bad_threshold_) || (age_ >= Genome::number_of_genes);
     }
     
     bool Animal::is_mature() const {

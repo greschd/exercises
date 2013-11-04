@@ -28,11 +28,11 @@ namespace Penna
         }
     }
     
-    // Count number of bad genes in first n years. (index starts at 0)
+    // Count number of bad genes at age n. (index starts at 0)
     age_type Genome::count_bad( age_type n) const {
         /// counting through the first n elements of the genome (including 0)
         age_type count = 0;
-        for(age_type j = 0; j < n; ++j) {
+        for(age_type j = 0; j < n + 1; ++j) {
             if( is_bad(j) )
                 ++count;
         }

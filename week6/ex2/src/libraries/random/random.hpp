@@ -5,7 +5,7 @@
 // Defines: class Generator, which will create linear congruential random number generator 
 //          X_n+1 = (a * X_n + c) mod m; with m = 4294967296, a = 1664525, c = 1013904223;
 //          The seed X_0 is the value with which the generator is initialized
-//          The type in which all the calculations are done is long unsigned int
+//          The type in which all the calculations are done is uint32_t
 
 //          MEMBER FUNCTIONS:
 //          constructor with and without seed (default seed = 0)

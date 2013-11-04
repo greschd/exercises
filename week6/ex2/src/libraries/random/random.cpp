@@ -8,7 +8,7 @@
 namespace progtech { namespace random {
     
     // COMMENT: not nice. Better to use a typedef inside the class, avoid defining types in redundant way!
-    using random_t = uint32_t; // if you change this you need to put the modulo back in 
+    typedef random_t = uint32_t; // if you change this you need to put the modulo back in 
 
     Generator::Generator(random_t const & x0) : xc(x0) {
     }
