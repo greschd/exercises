@@ -45,6 +45,7 @@ namespace Penna
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // are we supposed to use our own random number generator?
         std::default_random_engine generator(seed);
         std::uniform_int_distribution<age_type> randnr(0, number_of_genes-1);
+        // COMMENT: usually you should initialize the random seed only once in the beginning of your program. More on this in the next lectures.
         
         /// generating the new genome (no mutation yet)
         Genome newgenome(*this);
