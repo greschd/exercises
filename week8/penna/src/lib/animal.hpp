@@ -12,6 +12,7 @@ namespace Penna
 class Animal
 {
 public:
+    typedef unsigned int age_type;
     static const age_type maximum_age = Genome::number_of_genes;
 
     static void set_bad_threshold( age_type t );

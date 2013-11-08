@@ -8,8 +8,14 @@
 
 namespace Penna 
 {
+    typedef unsigned int age_type;
+    
     void Genome::set_mutation_rate( age_type m ) {
         mutation_rate_ = m;
+    }
+    
+    age_type Genome::get_mutation_rate() {
+        return mutation_rate_;
     }
     
     // Default constructor: Initialize genes to all good. 

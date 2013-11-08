@@ -3,9 +3,10 @@
 // File:    animal.cpp
 
 #include <iostream>
-#include "animal.hpp"
+#include <animal.hpp>
 
 namespace Penna {
+    typedef unsigned int age_type;
     
     void Animal::set_bad_threshold(age_type t) {
         Animal::bad_threshold_ = t;
