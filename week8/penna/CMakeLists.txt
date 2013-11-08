@@ -12,7 +12,7 @@ endif(BUILD_LIB_SHARED)
 
 # setting the library / executables paths
 set(LIBRARY_PATH src/lib/)
-set(EXECUTABLE_PATH src/simulation/)
+set(EXECUTABLE_PATH simulation/)
 
 # FLAGS
 add_definitions(-Wall -std=c++11)
