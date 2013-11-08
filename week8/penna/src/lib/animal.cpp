@@ -41,6 +41,10 @@ namespace Penna {
         return age_;
     }
     
+    age_type Animal::count_bad(age_type a) const {
+        return gen_.count_bad(a);
+    }
+    
     // Make the animal grow older by one year.
     void Animal::grow() {
         ++age_;

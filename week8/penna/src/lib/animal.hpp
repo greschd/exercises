@@ -26,12 +26,13 @@ public:
     bool is_dead() const; // the first gene is evaluated at age 0, not 1
     bool is_mature() const;
     age_type age() const;
+    age_type count_bad(age_type = Genome::number_of_genes) const; // counts the number of bad genes the animal has
 
     // Make the animal grow older by one year.
     void grow();
     // Create a baby animal inheriting its genome from this except for some random mutations.
     Animal give_birth() const;
-
+    
 private:
     // Number of bad genes an animal can tolerate. Parameter T in Penna's paper. (Standard: 0)
     static age_type bad_threshold_;
