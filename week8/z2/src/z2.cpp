@@ -7,7 +7,7 @@
 // Z2 class
 enum Z2 {Plus, Minus};
 
-template<class T>
+template<class T> /// needs to have a copy constructor that accepts 1 as an argument
 T identity_element() { return T(1); }
 
 template<>
@@ -22,19 +22,19 @@ std::ostream& operator<<(std::ostream& os,const Z2 a) {
     return os;
 }
 
-template<class T>
+template<class T> /// needs: comparison, unitary minus
 T operator*(const T a, const Z2 b)
 {
     return (b == Plus ? a : -a);
 }
 
-template<class T>
+template<class T> /// needs: comparison, unitary minus
 T operator*(const Z2 b, const T a)
 {
     return (b == Plus ? a : -a);
 }
 
-template<class T>
+template<class T> /// needs: assignability, multiplication (plus the conditions from identity_element)
 T mypow(T a, const unsigned int n)
 {
     T b = identity_element<T>();
