@@ -20,21 +20,20 @@ public:
     Population();
     Population(size_type = 0, age_type = Genome::get_mutation_rate()); // specify number of animals and initial rate of bad genes
     
-    
-    size_type const size(); // counts the number of animals in the population
-    
-    
     void grow(); // ages the whole population by one year
     
-    void reproduce(); // lets the mature animals generate offspring
+    size_type reproduce(); // lets the mature animals generate offspring, returns number of births
     
-    bool test_dead(const Animal &); // checks if an animal is dead
-    
-    void die(); // kills dying animals 
+    size_type die(); // kills dying animals, returns number of deaths
     
     void add_year(); // combines all the effects of one year on the population
     
     static void set_nmax(size_type); 
+    
+    // measurement functions
+    size_type size() const ; // counts the number of animals in the population
+    
+    age_type tot_age() const; // counts up the age of the whole population
     
 private:
     container_type population_; /// I choose lists because I never want to access only one Animal

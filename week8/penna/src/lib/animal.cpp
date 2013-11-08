@@ -37,6 +37,10 @@ namespace Penna {
         return age_ > maturity_age_;
     }
     
+    age_type Animal::age() const {
+        return age_;
+    }
+    
     // Make the animal grow older by one year.
     void Animal::grow() {
         ++age_;

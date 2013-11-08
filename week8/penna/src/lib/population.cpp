@@ -26,11 +26,6 @@ namespace Penna {
         Genome::set_mutation_rate(m_previous); ///restore mutation rate
     }
     
-    // counts the number of animals in the population
-    size_type const Population::size() {
-        return population_.size();
-    } 
-
     // ages the whole population by one year
     void Population::grow() {
         for(auto it = population_.begin(); it != population_.end() ; ++it) {
@@ -39,14 +34,16 @@ namespace Penna {
     }
     
     // lets the mature animals generate offspring
-    void Population::reproduce() {
+    size_type Population::reproduce() {
         container_type babies;
         for(auto it = population_.begin(); it != population_.end(); ++it) {
             if(it -> is_mature()) {
                 babies.push_back(it -> give_birth());
             }
         }
+        size_type birth_nr = babies.size();
         population_.splice(population_.end(), babies);
+        return birth_nr;
     }
         
     // function object to check for random death
@@ -66,10 +63,11 @@ namespace Penna {
     };
 
     // kills dying animals 
-    void Population::die() {
+    size_type Population::die() {
+        size_type nbefore = population_.size();
         population_.remove_if(std::mem_fun_ref(&Animal::is_dead));
-        size_type N = population_.size();
-        population_.remove_if(random_death(nmax_, N));
+        population_.remove_if(random_death(nmax_, nbefore));
+        return nbefore - population_.size();
     }
     
     // combines all the effects of one year on the population
@@ -81,6 +79,21 @@ namespace Penna {
 
     void Population::set_nmax(size_type n) {
         nmax_ = n;
+    }
+    
+    // measurement functions
+    
+    // counts the number of animals in the population
+    size_type Population::size() const {
+        return population_.size();
+    } 
+    
+    age_type Population::tot_age() const {
+        age_type count = 0;
+        for(auto it = population_.begin(); it != population_.end() ; ++it) {
+            count += it -> age();
+        }
+        return count;
     }
     
     size_type Population::nmax_ = 10;
