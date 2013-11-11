@@ -28,3 +28,8 @@ add_library(genome ${LIB_TYPE} ${LIBRARY_PATH}/genome.cpp)
 add_executable(simulation.x ${EXECUTABLE_PATH}simulation.cpp)
 target_link_libraries(simulation.x genome animal population)
 
+# plots
+add_custom_target(data ALL COMMAND ./simulation.x) # how can I achieve that those are only called when necessary ?
+add_custom_target(plot ALL COMMAND python ../simulation/plot.py)
+add_dependencies(data simulation.x)
+add_dependencies(plot data)
