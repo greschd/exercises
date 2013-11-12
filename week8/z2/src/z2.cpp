@@ -11,7 +11,7 @@ template<class T> /// needs to have a copy constructor that accepts 1 as an argu
 T identity_element() { return T(1); }
 
 template<>
-Z2 identity_element() {return Plus;}
+Z2 identity_element<Z2>() {return Plus;} // COMMENT: correcting syntax for specialization
 
 Z2 operator*(const Z2 a,const Z2 b) {
     return (a == b ? Plus : Minus);
@@ -22,19 +22,19 @@ std::ostream& operator<<(std::ostream& os,const Z2 a) {
     return os;
 }
 
-template<class T> /// needs: comparison, unitary minus
+template<class T> /// needs: comparison, unitary minus, CopyConstructible
 T operator*(const T a, const Z2 b)
 {
     return (b == Plus ? a : -a);
 }
 
-template<class T> /// needs: comparison, unitary minus
+template<class T> /// needs: comparison, unitary minus, CopyConstructible
 T operator*(const Z2 b, const T a)
 {
     return (b == Plus ? a : -a);
 }
 
-template<class T> /// needs: assignability, multiplication (plus the conditions from identity_element)
+template<class T> /// needs: CopyConstructible, assignability, multiplication (plus the conditions from identity_element)
 T mypow(T a, const unsigned int n)
 {
     T b = identity_element<T>();
