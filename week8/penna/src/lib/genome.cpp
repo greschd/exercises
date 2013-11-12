@@ -49,6 +49,7 @@ namespace Penna
     Genome Genome::mutate() const {
         /// setting up the random number generator (with a time - based seed)
         unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // are we supposed to use our own random number generator?
+        // WRONG: see next lecture, this is really bad!
         std::default_random_engine generator(seed);
         std::uniform_int_distribution<age_type> randnr(0, number_of_genes-1);
         

@@ -8,8 +8,9 @@
 #include <time.h>
 
 namespace Penna {
+    // COMMENT: you may access these types like Population::container_type
     typedef unsigned int age_type;
-    typedef uint size_type;
+    typedef unsigned int size_type; // COMMENT: uint is not a standard type!
     typedef std::list<Animal> container_type;
     
     // constructors

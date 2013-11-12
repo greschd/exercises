@@ -30,6 +30,8 @@ target_link_libraries(simulation.x genome animal population)
 
 # plots
 add_custom_target(data ALL COMMAND ./simulation.x) # how can I achieve that those are only called when necessary ?
+# COMMENT: from the documentation:
+# The target has no output file and is ALWAYS CONSIDERED OUT OF DATE even if the commands try to create a file with the name of the target. Use ADD_CUSTOM_COMMAND to generate a file with dependencies.
 add_custom_target(plot ALL COMMAND python ../simulation/plot.py)
 add_dependencies(data simulation.x)
 add_dependencies(plot data)
