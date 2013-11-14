@@ -14,7 +14,7 @@ using namespace Penna;
 
 
 template<class U>
-Population<U> make_pop(size_type nmax = 10, size_type n = 0, U const & distr = std::uniform_int_distribution<age_type>(0, 64))
+Population<U> make_pop(size_type nmax, size_type n, U const & distr)
 {
     return Population<U>(nmax, n, distr);
 }
@@ -50,11 +50,11 @@ void measurement(size_type M, size_type nmax, size_type n0, age_type T, age_type
 int main(int argc, char* argv[]) {
     
     
-    size_type nmax(2000);
-    size_type n0(1000);
-    age_type years(100);
+    size_type nmax(10000);
+    size_type n0(9000);
+    age_type years(1000);
     
-    std::normal_distribution<double> distr(0.4,0.05);
+    std::normal_distribution<double> distr(Genome::number_of_genes * 0.26, Genome::number_of_genes * 0.01);
     
     // population size measurements
     measurement(0, nmax, n0, 2, 8, years, "0", distr);
