@@ -20,13 +20,12 @@ add_definitions(-Wall -std=c++11)
 # including directories and adding libraries
 include_directories("${PROJECT_SOURCE_DIR}/src/lib/")
 
-add_library(population ${LIB_TYPE} ${LIBRARY_PATH}/population.cpp ${LIBRARY_PATH}/animal.cpp ${LIBRARY_PATH}genome.cpp)
 add_library(animal ${LIB_TYPE} ${LIBRARY_PATH}/animal.cpp ${LIBRARY_PATH}genome.cpp)
 add_library(genome ${LIB_TYPE} ${LIBRARY_PATH}/genome.cpp)
 
 # compiling the simulation
 add_executable(simulation.x ${EXECUTABLE_PATH}simulation.cpp)
-target_link_libraries(simulation.x genome animal population)
+target_link_libraries(simulation.x genome animal)
 
 # plots
 add_custom_target(data ALL COMMAND ./simulation.x) # how can I achieve that those are only called when necessary ?

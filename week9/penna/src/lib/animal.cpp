@@ -41,13 +41,14 @@ namespace Penna {
         return age_;
     }
     
-    age_type Animal::count_bad(age_type a) const {
-        return gen_.count_bad(a);
+    // return the Animal's Genome
+    Genome const & Animal::get_genome() const {
+        return gen_;
     }
     
     // Make the animal grow older by one year.
-    void Animal::grow() {
-        ++age_;
+    void Animal::grow(Animal::age_type n) {
+        age_ += n;
     }
     
     // Create a baby animal inheriting its genome from this except for some random mutations.

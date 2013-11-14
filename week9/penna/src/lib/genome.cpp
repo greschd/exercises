@@ -8,13 +8,11 @@
 
 namespace Penna 
 {
-    typedef unsigned int age_type;
-    
-    void Genome::set_mutation_rate( age_type m ) {
+    void Genome::set_mutation_rate( Genome::age_type m ) {
         mutation_rate_ = m;
     }
     
-    age_type Genome::get_mutation_rate() {
+    Genome::age_type Genome::get_mutation_rate() {
         return mutation_rate_;
     }
     
@@ -25,7 +23,7 @@ namespace Penna
     Genome::Genome(Genome const & gene): genes_(gene.genes_) {}
     
     // Check if i'th gene is bad. (index starts at 0)
-    bool Genome::is_bad(age_type i) const {
+    bool Genome::is_bad(Genome::age_type i) const {
         if(i >= number_of_genes) {
             return 0;
         }
@@ -35,10 +33,10 @@ namespace Penna
     }
     
     // Count number of bad genes at age n. (index starts at 0)
-    age_type Genome::count_bad( age_type n) const {
+    Genome::age_type Genome::count_bad( Genome::age_type n) const {
         /// counting through the first n elements of the genome (including 0)
-        age_type count = 0;
-        for(age_type j = 0; j < n + 1; ++j) {
+        Genome::age_type count = 0;
+        for(Genome::age_type j = 0; j < n + 1; ++j) {
             if( is_bad(j) )
                 ++count;
         }
@@ -48,16 +46,15 @@ namespace Penna
      // Generate a copy of this, except for M flipped genes.   
     Genome Genome::mutate() const {
         /// setting up the random number generator (with a time - based seed)
-        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count(); // are we supposed to use our own random number generator?
-        // WRONG: see next lecture, this is really bad!
+        unsigned seed = 42;
         std::default_random_engine generator(seed);
-        std::uniform_int_distribution<age_type> randnr(0, number_of_genes-1);
+        std::uniform_int_distribution<Genome::age_type> randnr(0, number_of_genes-1);
         
         /// generating the new genome (no mutation yet)
         Genome newgenome(*this);
         
         /// flipping each bit with probability m / number_of_genes
-        for(age_type i = 0; i < number_of_genes; ++i) {
+        for(Genome::age_type i = 0; i < number_of_genes; ++i) {
             if(randnr(generator) < mutation_rate_)
                 newgenome.genes_.flip(i);
         }
@@ -65,7 +62,7 @@ namespace Penna
         return newgenome;
     }
     
-    age_type Genome::mutation_rate_ = 0;
+    Genome::age_type Genome::mutation_rate_ = 0;
 
 }
 

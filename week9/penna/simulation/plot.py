@@ -2,72 +2,28 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pylab
 
-def plot_size(name):
-    ios = open("../build/m_" + name + ".txt", 'r')
-    data = np.loadtxt(ios, skiprows = 1)
-    ios.close()
+def plot_sizes():
+    ios0 = open("../build/m_0.txt", 'r')
+    data0 = np.loadtxt(ios0, skiprows = 1)
+    ios0.close()
     
-    ios = open("../build/v_" + name + ".txt", 'r')
-    var = np.loadtxt(ios, skiprows = 1)
-
-    title = "m0 = " + str(var[0]) + ", m = " + str(var[1]) + ", nmax = " + str(var[2]) + ", n0 = " + str(var[3]) + ", T = " + str(var[4]) + ", R = " + str(var[5])
-    plt.title(title)
+    ios2 = open("../build/m_2.txt", 'r')
+    data2 = np.loadtxt(ios2, skiprows = 1)
+    ios2.close();
+    
+    
+    plt.title("Population size for T = 2, R = 8, starting with 450'000 animals.")
     plt.grid(True)
     plt.xlabel("years")
     plt.ylabel("population size")
-    plt.plot(data[:,0], data[:,1],'ro')
+    plt.xscale('log')
+    plt.yscale('log')
+    plt.plot(data0[:,0], data0[:,1],'ro', label = "m = 0")
+    plt.plot(data2[:,0], data2[:,1],'go', label = "m = 2")
+    plt.legend(bbox_to_anchor = (1, .3), loc = 5)
 
     #------------------- save the plot ------------------- 
-    pylab.savefig("../build/p_" + name + ".pdf")
+    pylab.savefig("../build/population_size.pdf")
     plt.clf()
     
-def plot_ageofdeath(): 
-    ios = open("../build/age_of_death.txt")
-    data = np.loadtxt(ios, skiprows = 1)
-    ios.close()
-    
-    plt.title("Average age of death with varying mutation rate")
-    plt.grid(True)
-    plt.xlabel("mutation rate")
-    plt.ylabel("average age of death")
-    plt.plot(data[:,0], data[:,1], 'go')
-    
-        #------------------- save the plot ------------------- 
-    pylab.savefig("../build/age_of_death.pdf")
-    plt.clf()
-    
-def plot_genedistribution():
-    ios = open("../build/initial.txt")
-    initial = np.loadtxt(ios, skiprows = 1)
-    ios.close()
-    
-    ios2 = open("../build/final.txt")
-    final = np.loadtxt(ios2, skiprows = 1)
-    ios2.close()
-    
-    plt.title("Gene distribution in the initial population")
-    plt.grid(True)
-    plt.xlabel("threshold")
-    plt.ylabel("survivors")
-    plt.plot(initial[:,0], initial[:,1], 'bo')
-    
-        #------------------- save the plot ------------------- 
-    pylab.savefig("../build/initial.pdf")
-    plt.clf()
-    
-    plt.title("Gene distribution in the final population")
-    plt.grid(True)
-    plt.xlabel("threshold")
-    plt.ylabel("survivors")
-    plt.plot(final[:,0], final[:,1], 'bo')
-    
-        #------------------- save the plot ------------------- 
-    pylab.savefig("../build/final.pdf")
-    plt.clf()
-    
-    
-    
-for i in range(1, 21):
-    plot_size(str(i))
-plot_ageofdeath()
-plot_genedistribution()
+plot_sizes()

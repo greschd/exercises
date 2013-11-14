@@ -12,7 +12,7 @@ namespace Penna
 class Animal
 {
 public:
-    typedef unsigned int age_type;
+    typedef Genome::age_type age_type;
     static const age_type maximum_age = Genome::number_of_genes;
 
     static void set_bad_threshold( age_type t );
@@ -26,10 +26,10 @@ public:
     bool is_dead() const; // the first gene is evaluated at age 0, not 1
     bool is_mature() const;
     age_type age() const;
-    age_type count_bad(age_type = Genome::number_of_genes) const; // counts the number of bad genes the animal has
+    Genome const & get_genome() const; // return the Animal's Genome
 
-    // Make the animal grow older by one year.
-    void grow();
+    // Make the animal grow older by n years (default: 1).
+    void grow(age_type = 1);
     // Create a baby animal inheriting its genome from this except for some random mutations.
     Animal give_birth() const;
     
