@@ -15,7 +15,7 @@ typedef double average_type;
 typedef std::pair<average_type, size_type> age_size_pair;
 typedef Genome::randgen_type randgen_type;
 
-randgen_type rng(42);
+randgen_type rng;
 
 // setting up some variables (that are the same for all measurements)
 namespace var { 
@@ -118,6 +118,12 @@ void measure_genedistr(size_type M, age_type T, age_type R, U const & distr) {
 
 
 int main(int argc, char* argv[]) {
+    
+    std::string str;
+    std::cout << "enter a seed: ";
+    std::getline(std::cin,str);
+    std::seed_seq seed1 (str.begin(),str.end());
+    rng.seed(seed1);
     
     std::uniform_int_distribution<unsigned int> distr1(0, Genome::number_of_genes);
     //~ std::normal_distribution<double> distr2(32, 10);
