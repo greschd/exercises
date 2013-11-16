@@ -7,6 +7,7 @@
 
 namespace Penna {
     typedef unsigned int age_type;
+    typedef Genome::randgen_type randgen_type;
     
     void Animal::set_bad_threshold(age_type t) {
         Animal::bad_threshold_ = t;
@@ -52,8 +53,8 @@ namespace Penna {
     }
     
     // Create a baby animal inheriting its genome from this except for some random mutations.
-    Animal Animal::give_birth() const {
-        Animal baby(gen_.mutate());
+    Animal Animal::give_birth(randgen_type & G) {
+        Animal baby(gen_.mutate(G));
         return baby;
     }
 }

@@ -10,7 +10,7 @@
 #include <utility>
 #include <vector>
 #include <random>
-#include <functional> // COMMENT: missing include
+#include <functional> 
 
 namespace Penna {
 
@@ -20,22 +20,24 @@ public:
     typedef Animal::age_type age_type;
     typedef unsigned int size_type; 
     typedef std::list<Animal> container_type;
+    typedef std::vector<size_type> measurement_container_type;
+    typedef double average_type;
+    typedef Genome::randgen_type randgen_type;
 
     // constructors
-    std::default_random_engine randgen;
     
-    Population (size_type nmax = 10, size_type n = 0, T const & t = std::uniform_int_distribution<unsigned int>(0, 64)): nmax_(nmax), population_(container_type()), distr_(t){ /// distr needs to fulfill the property that distr(randgen) returns a value convertible to age_type (a.k.a. unsigned int)
+    Population (T const & t , randgen_type & rng, size_type nmax = 10, size_type n = 0): nmax_(nmax), population_(container_type()), distr_(t){ /// distr needs to fulfill the property that distr(randgen) returns a value convertible to age_type (a.k.a. unsigned int)
         
         age_type m_previous = Genome::get_mutation_rate(); /// get previous mutation rate 
         Genome perfect_gene;
                 
         for(size_type i = 0; i < n; ++i) {
-            age_type rand_m = age_type(distr_(randgen));
+            age_type rand_m = age_type(distr_(rng));
             while(0 > rand_m or rand_m > Genome::number_of_genes ) {
-                rand_m = age_type(distr_(randgen));
+                rand_m = distr_(rng);
             }
             Genome::set_mutation_rate(rand_m); 
-            population_.push_back(Animal(perfect_gene.mutate()));
+            population_.push_back(Animal(perfect_gene.mutate(rng)));
         }
         
         Genome::set_mutation_rate(m_previous); ///restore mutation rate
@@ -43,12 +45,18 @@ public:
     }
     
     // combines all the effects of one year on the population
-    std::pair<size_type, size_type> add_year() {
-        std::pair<size_type, size_type> values;
-        values.first = reproduce();
-        values.second = die();
+    void add_year(randgen_type & G) {
+        reproduce(G);
+        die();
         grow();
-        return values;
+    }
+    
+    // adding a year whilst measuring the ages of the dying animals
+    average_type add_year_measure(randgen_type & G) {
+        reproduce(G);
+        average_type dyingage = die_measure();
+        grow();
+        return dyingage;
     }
 
     void set_nmax(size_type n) {
@@ -60,14 +68,19 @@ public:
         return population_.size();
     } 
     
-    age_type tot_age() const {
-        age_type count = 0;
-        for(auto it = population_.begin(); it != population_.end() ; ++it) {
-            count += it -> age();
+    // get the distribution of bad genes
+    measurement_container_type gene_distr() {
+        measurement_container_type result(Genome::number_of_genes, 0);
+        for(auto it = population_.begin(); it != population_.end(); ++it) {
+            for(age_type i = 0; i < Genome::number_of_genes; ++i) {
+                if (it -> get_genome().is_bad(i))
+                {
+                    ++result.at(i);
+                }
+            }
         }
-        return count;
+        return result;
     }
-    
     
 private:
     // ages the whole population by one year
@@ -78,16 +91,14 @@ private:
     }
     
     // lets the mature animals generate offspring
-    size_type reproduce() {
+    void reproduce(randgen_type & G) {
         container_type babies;
         for(auto it = population_.begin(); it != population_.end(); ++it) {
             if(it -> is_mature()) {
-                babies.push_back(it -> give_birth());
+                babies.push_back(it -> give_birth(G));
             }
         }
-        size_type birth_nr = babies.size();
         population_.splice(population_.end(), babies);
-        return birth_nr;
     }
     
     // function object to check for random death
@@ -107,17 +118,34 @@ private:
     };
 
     // kills dying animals 
-    size_type die(bool random_death_exists = 1) {
-        
+    void die(bool random_death_exists = 1) {
         size_type nbefore = population_.size();
         population_.remove_if(std::mem_fun_ref(&Animal::is_dead));
         if (random_death_exists)
         {
-            population_.remove_if(random_death(nmax_, population_.size()));
+            population_.remove_if(random_death(nmax_, nbefore));
         }
         
-        return nbefore - population_.size();
     }
+    
+    average_type die_measure(bool random_death_exists = 1) {
+        age_type ages = 0;
+        size_type deaths = 0;
+        size_type nbefore = population_.size();
+        for(auto it = population_.begin(); it != population_.end();) {
+            if((it -> is_dead()) or random_death(nmax_, nbefore)(*it)) {
+                ages += it -> age();
+                ++deaths;
+                it = population_.erase(it); /// takes care of ++it
+            }
+            else {
+                ++it;
+            }
+        }
+        return ages/average_type(deaths);
+    }
+    
+    
 
     size_type nmax_; /// maximum number of animals
     

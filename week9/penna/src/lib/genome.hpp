@@ -3,6 +3,7 @@
 
 #include <bitset>
 #include <limits>
+#include <random>
 
 
 namespace Penna
@@ -16,6 +17,7 @@ class Genome
 {
 public:
     typedef unsigned int age_type;
+    typedef std::mt19937 randgen_type;
     
     // Up to this size bitset is a lot faster
     static const age_type number_of_genes = 
@@ -35,7 +37,7 @@ public:
     // Count number of bad genes in first n years. (index starts at 0)
     age_type count_bad( age_type ) const;
     // Generate a copy of this, except for M flipped genes.
-    Genome mutate() const;
+    Genome mutate(randgen_type &);
 
 private:
     typedef std::bitset<number_of_genes> gene_type;

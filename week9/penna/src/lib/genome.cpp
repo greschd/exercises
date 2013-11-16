@@ -5,6 +5,7 @@
 #include "genome.hpp"
 #include <chrono>
 #include <random>
+#include <iostream>
 
 namespace Penna 
 {
@@ -44,25 +45,24 @@ namespace Penna
     }
     
      // Generate a copy of this, except for M flipped genes.   
-    Genome Genome::mutate() const {
+    Genome Genome::mutate(randgen_type & G) {
         /// setting up the random number generator (with a time - based seed)
-        unsigned seed = 42;
-        std::default_random_engine generator(seed);
-        std::uniform_int_distribution<Genome::age_type> randnr(0, number_of_genes-1);
+        std::uniform_int_distribution<Genome::age_type> randnr(0, number_of_genes - 1);
         
         /// generating the new genome (no mutation yet)
         Genome newgenome(*this);
         
         /// flipping each bit with probability m / number_of_genes
         for(Genome::age_type i = 0; i < number_of_genes; ++i) {
-            if(randnr(generator) < mutation_rate_)
+            if(randnr(G) < mutation_rate_) {
                 newgenome.genes_.flip(i);
+            }
         }
-        
         return newgenome;
     }
     
-    Genome::age_type Genome::mutation_rate_ = 0;
-
+    Genome::age_type Genome::mutation_rate_ = 10;
 }
+
+
 

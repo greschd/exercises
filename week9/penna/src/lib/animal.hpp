@@ -13,6 +13,7 @@ class Animal
 {
 public:
     typedef Genome::age_type age_type;
+    typedef Genome::randgen_type randgen_type;
     static const age_type maximum_age = Genome::number_of_genes;
 
     static void set_bad_threshold( age_type t );
@@ -31,7 +32,7 @@ public:
     // Make the animal grow older by n years (default: 1).
     void grow(age_type = 1);
     // Create a baby animal inheriting its genome from this except for some random mutations.
-    Animal give_birth() const;
+    Animal give_birth(randgen_type & G);
     
 private:
     // Number of bad genes an animal can tolerate. Parameter T in Penna's paper. (Standard: 0)

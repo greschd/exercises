@@ -11,7 +11,7 @@ template<class T> /// needs to have a copy constructor that accepts 1 as an argu
 T identity_element() { return T(1); }
 
 template<>
-Z2 identity_element<Z2>() {return Plus;} // COMMENT: correcting syntax for specialization
+Z2 identity_element<Z2>() {return Plus;} // COMMENT: correcting syntax for specialization (Z2 in return value and <> were missing)
 
 Z2 operator*(const Z2 a,const Z2 b) {
     return (a == b ? Plus : Minus);
