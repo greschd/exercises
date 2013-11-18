@@ -131,15 +131,15 @@ int main(int argc, char* argv[]) {
     // population size measurements
     measure_size(0, 2, 8, "0", distr1);
     measure_size(8, 2, 8, "8", distr1);
-    std::cout << "finished first measurement" << std::endl;
+    std::cout << "finished 1st measurement" << std::endl;
     
     // measuring the age at death and population size 
     measure_age_size(2, 4, distr1);
-    std::cout << "finished second measurement" << std::endl;
+    std::cout << "finished 2nd measurement" << std::endl;
     
     // measuring the gene distribution in steady - state
     measure_genedistr(8, 2, 8, distr1);
-    std::cout << "finished third measurement" << std::endl;
+    std::cout << "finished 3rd measurement" << std::endl;
     
     return 0;
 }

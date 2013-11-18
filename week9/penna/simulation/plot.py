@@ -66,5 +66,5 @@ def plot_genedistr():
     plt.clf()
 
 plot_sizes()
-#~ plot_ageatdeath()    
-#~ plot_genedistr()
+plot_ageatdeath()    
+plot_genedistr()
