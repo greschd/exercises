@@ -30,14 +30,20 @@ struct result_type {
     typedef typename helper<T, std::numeric_limits<T>::is_integer>::type type;
 };
 
+//what if a and b are of different types, say int and float, or double
+//and float. in the first case we would need to return float and in
+//the latter double
+
 template <class FuncType, class T>
-typename result_type<T>::type simpson(FuncType func, T const & a, T const & b, const int & N) {
+typename result_type<T>::type simpson(FuncType& func, T const & a, T const & b, const int & N) {
     // asserting valid function parameters 
     assert(N > 0);   // I didn't want to use unsigned int because a small negative input would produce huge N
+    //ok, but why would you have negative input for N?
     
     // Handle the case a == b
     if(a == b)
         return 0;
+    //this should be handled automatically by the routine
     
     // Computing the step between two bins
     const typename result_type<T>::type step = (b - a) / N;

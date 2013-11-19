@@ -14,7 +14,7 @@ public:
     
     mysin(argument_type const & l): lambda_(l) {}
     
-    return_type operator()(argument_type x) {
+    return_type operator()(const argument_type x) {
         return sin(lambda_ * x);
     }
     
