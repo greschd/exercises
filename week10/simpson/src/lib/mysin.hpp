@@ -6,15 +6,13 @@
 #define __MYSIN_HEADER
 
 #include <math.h>
+#include <simpson.hpp>
 
-class mysin {
+class mysin:  public func_class {
 public:
-    typedef double argument_type;
-    typedef double return_type;
-    
     mysin(argument_type const & l): lambda_(l) {}
     
-    return_type operator()(const argument_type x) {
+    func_class::f_result_type operator()(const func_class::argument_type x) {
         return sin(lambda_ * x);
     }
     

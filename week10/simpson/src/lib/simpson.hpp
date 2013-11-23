@@ -6,14 +6,15 @@
 // PRE:     Input:      A function pointer on a function taking a double and returning a double
 //                      2 doubles a, b 
 //                      An integer N > 0.
-// POST:    Output is the integral over (a,b) of the function using the Simpson integration rule over N bins.
-// Depends on:          libraries iostream, math.h, assert.h
+// POST:                Output is the integral over (a,b) of the function using the Simpson integration rule over N bins.
+// Depends on:          libraries iostream, assert.h
 
 #ifndef __SIMPSON_HEADER
 #define __SIMPSON_HEADER
 
 #include <assert.h>
 #include <limits>
+
 
 template <class T, bool F>
 struct helper {
@@ -30,20 +31,17 @@ struct result_type {
     typedef typename helper<T, std::numeric_limits<T>::is_integer>::type type;
 };
 
-//what if a and b are of different types, say int and float, or double
-//and float. in the first case we would need to return float and in
-//the latter double
+class func_class {
+public:
+    typedef double f_result_type;
+    typedef double argument_type; 
+    virtual f_result_type operator()(const argument_type) = 0;
+};
 
-template <class FuncType, class T>
-typename result_type<T>::type simpson(FuncType& func, T const & a, T const & b, const int & N) {
+template <class T>
+typename result_type<T>::type simpson(func_class & func, T const & a, T const & b, const int & N) {
     // asserting valid function parameters 
-    assert(N > 0);   // I didn't want to use unsigned int because a small negative input would produce huge N
-    //ok, but why would you have negative input for N?
-    
-    // Handle the case a == b
-    if(a == b)
-        return 0;
-    //this should be handled automatically by the routine
+    assert(N > 0);   
     
     // Computing the step between two bins
     const typename result_type<T>::type step = (b - a) / N;
