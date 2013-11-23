@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <iterator>
 #include <assert.h>
-#include <timer/dg_timer.hpp> /// uses variable name timer
+#include <timer/dg_timer.hpp> /// uses variable name tool::timer
 
 typedef unsigned int size_type;
 typedef int val_type;
@@ -65,7 +65,7 @@ void measure(size_type const & container_size, size_type const & k, G & rng) {
     std::cout <<  tool::timer << std::endl;
 }
 
-//timing for sets
+// timing for sets
 template<class G>
 void measure(size_type const & container_size, size_type const & k, G & rng) {
     set_type container = initialize_set(container_size);
