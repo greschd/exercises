@@ -15,19 +15,19 @@
 #include <assert.h>
 #include <limits>
 
-template <class T, bool F>
-struct helper {
+template <class T, ,bool F>
+struct helper1 {
     typedef T type;
 };
 
 template <class T> 
-struct helper<T, true> {
+struct helper1<T, true> {
     typedef double type;
 };
 
-template <class T>
+template <class T, class U>
 struct result_type {
-    typedef typename helper<T, std::numeric_limits<T>::is_integer>::type type;
+    typedef typename helper1<T, std::numeric_limits<T>::is_integer>::type type;
 };
 
 //what if a and b are of different types, say int and float, or double
