@@ -20,7 +20,7 @@ typedef std::set<val_type> set_type;
 template<class T>
 T initialize(size_type const & n) {
     assert(n >= 0);
-    val_type* array = new val_type[n];
+    typename T::value_type* array = new typename T::value_type[n];
     for(size_type i = 0; i < n; ++i) {
         array[i] = i;
     }
@@ -33,7 +33,7 @@ T initialize(size_type const & n) {
 template<>
 set_type initialize(size_type const & n) {
     assert(n >= 0);
-    val_type* array = new val_type[n];
+    set_type::value_type* array = new set_type::value_type[n];
     for(size_type i = 0; i < n; ++i) {
         array[i] = i;
     }
