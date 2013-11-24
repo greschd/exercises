@@ -29,8 +29,9 @@ T initialize(size_type const & n) {
     return container;
 }
 
-// initializes the set
-set_type initialize_set(size_type const & n) {
+// specialization for sets
+template<>
+set_type initialize(size_type const & n) {
     assert(n >= 0);
     val_type* array = new val_type[n];
     for(size_type i = 0; i < n; ++i) {
@@ -65,21 +66,6 @@ void measure(size_type const & container_size, size_type const & k, G & rng) {
     std::cout <<  tool::timer << std::endl;
 }
 
-// timing for sets
-template<class G>
-void measure(size_type const & container_size, size_type const & k, G & rng) {
-    set_type container = initialize_set(container_size);
-    tool::timer.start();
-    insert_erase(container, k, rng);
-    tool::timer.stop();
-    std::cout << tool::timer << std::endl;
-}
-
-template<class G>
-void measure_set(size_type const & container_size, size_type const & k, G & rng) {
-    
-}
-
 int main(int argc, char* argv[]) {
     std::mt19937 rng;
     rng.seed(42);
@@ -98,7 +84,7 @@ int main(int argc, char* argv[]) {
     
     // timing the set
     std::cout << "set timing:" << std::endl;
-    measure(container_size, k, rng);
+    measure<set_type>(container_size, k, rng);
         
     return 0;
 }
