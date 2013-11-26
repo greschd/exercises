@@ -15,38 +15,41 @@ typedef unsigned int count_type;
 template<class T> /// for different random number generators
 bool new_point(T & rng) {
     std::uniform_real_distribution<length_type> distr(0,1);
-    length_type x = distr(rng);
-    length_type y = distr(rng);
+    const length_type x = distr(rng);
+    const length_type y = distr(rng);
     return (x*x + y*y) < 1;
 }
 
 bool new_point() { /// using drand48 
-    length_type x = drand48();
-    length_type y = drand48();
+    const length_type x = drand48();
+    const length_type y = drand48();
     return (x*x + y*y) < 1;
 }
 
 template<class T>
-void measure(count_type N, T & rng)
+void measure(const count_type N, T & rng)
 {
     count_type count_in = 0;
     for(count_type i = 0; i < N; ++i) {
-        if(new_point(rng)) {
-            ++count_in;
-        }
+      count_in += new_point(rng);
+        // if(new_point(rng)) {
+        //     ++count_in;
+        // }
     }
     std::cout << "For N = " << N << ": "<<  std::endl;
     std::cout << "Pi = " <<  4 * average_type(count_in) / N << " +/- " << 4 * std::sqrt((count_in*(1 - count_in/average_type(N)))) / N  << std::endl;
     /// error of the mean is the same as the "standard" formula, but making use of the fact that the only possible values are 0 and 1
+    //yes^
 }
 
-void measure(count_type N)
+void measure(const count_type N)
 {
     count_type count_in = 0;
     for(count_type i = 0; i < N; ++i) {
-        if(new_point()) {
-            ++count_in;
-        }
+      count_in += new_point();
+        // if(new_point()) {
+        //     ++count_in;
+        // }
     }
     std::cout << "For N = " << N << ": "<<  std::endl;
     std::cout << "Pi = " <<  4 * average_type(count_in) / N << " +/- " << 4 * std::sqrt((count_in*(1 - count_in/average_type(N)))) / N  << std::endl;
@@ -68,6 +71,9 @@ int main(int argc, char* argv[]) {
     std::cout << "enter a seed for drand48: " << std::endl;
     std::cin >> seed2;
     seed48(&seed2);
+
+    //why not hardcode the seeds? the results should be independent of
+    //the seeds for large enough sample sizes
     
     std::cout << "from the mersenne twister:" << std::endl;
     for(uint i = 100; i <= 1e7; i*= 10) {
