@@ -12,7 +12,7 @@ class mysin:  public func_class {
 public:
     mysin(argument_type const & l): lambda_(l) {}
     
-    func_class::f_result_type operator()(const func_class::argument_type x) {
+    func_class::f_result_type operator()(const func_class::argument_type x) const{
         return sin(lambda_ * x);
     }
     

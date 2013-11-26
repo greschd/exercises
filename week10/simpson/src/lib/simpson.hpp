@@ -35,11 +35,11 @@ class func_class {
 public:
     typedef double f_result_type;
     typedef double argument_type; 
-    virtual f_result_type operator()(const argument_type) = 0;
+    virtual f_result_type operator()(const argument_type) const = 0;
 };
 
 template <class T>
-typename result_type<T>::type simpson(func_class & func, T const & a, T const & b, const int & N) {
+typename result_type<T>::type simpson(func_class const & func, T const & a, T const & b, const int & N) {
     // asserting valid function parameters 
     assert(N > 0);   
     
