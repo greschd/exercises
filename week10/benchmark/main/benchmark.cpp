@@ -25,9 +25,6 @@ T initialize(size_type const & n) {
     for(size_type i = 0; i < n; ++i) {
         array[i] = i;
     }
-    // T container(n);
-    // std::copy(array, array + n , container.begin());
-    // return container;
 
     return T(array,array+n);
 }

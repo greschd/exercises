@@ -14,7 +14,6 @@
 
 namespace Penna {
 
-template<class T>
 class Population {
 public:
     typedef Animal::age_type age_type;
@@ -26,16 +25,16 @@ public:
 
     // constructors
     
-    Population(T const & t , randgen_type & rng, const size_type nmax = 10, const size_type n = 0) : nmax_(nmax), distr_(t) { 
-    /// distr needs to fulfill the property that distr(randgen) returns a value convertible to age_type (a.k.a. unsigned int)
+    Population(randgen_type & rng, size_type const & nmax = 10, size_type const & n = 5) : nmax_(nmax) { 
         
         age_type m_previous = Genome::get_mutation_rate(); /// get previous mutation rate 
         Genome perfect_gene;
+        std::uniform_int_distribution<age_type> distr(0, Genome::number_of_genes);
                 
         for(size_type i = 0; i < n; ++i) {
-            age_type rand_m = age_type(distr_(rng));
+            age_type rand_m = age_type(distr(rng));
             while(0 > rand_m or rand_m > Genome::number_of_genes ) {
-                rand_m = distr_(rng);
+                rand_m = distr(rng);
             }
             Genome::set_mutation_rate(rand_m); 
             population_.push_back(Animal(perfect_gene.mutate(rng)));
@@ -78,7 +77,22 @@ public:
         return result;
     }
     
-  private:
+  protected:
+    // function object to check for death of the animal
+    class animal_dies {
+    public:    
+        typedef bool return_type;
+
+        animal_dies(size_type const & N0, size_type const & N): N0_(N0), N_(N) {}
+
+        return_type operator()(Animal const & A) {
+            return ((rand() % N0_) < N_) || A.is_dead() ;
+        }
+    private:
+        const size_type N0_;
+        const size_type N_;
+    };
+    
     // ages the whole population by one year
     void grow() {
         for(auto it = population_.begin(); it != population_.end() ; ++it) {
@@ -101,38 +115,19 @@ public:
       //check out std::transform
     }
     
-    // function object to check for random death
-    class random_death {
-    public:    
-        typedef size_type argument_type;
-        typedef bool return_type;
-
-        random_death(argument_type const & N0, argument_type const & N): N0_(N0), N_(N) {}
-
-        return_type operator()(Animal const & A) {
-            return (rand() % N0_) < N_;
-        }
-    private:
-        const size_type N0_;
-        const size_type N_;
-    };
 
     // kills dying animals 
-    virtual void die(bool random_death_exists = 1) {
+    virtual void die() {
         size_type nbefore = population_.size();
-        population_.remove_if(std::mem_fun_ref(&Animal::is_dead)); //you can put this into the random_death predicate
-        if (random_death_exists) {
-            population_.remove_if(random_death(nmax_, nbefore));
-        }
-        
+        population_.remove_if(animal_dies(nmax_, nbefore));
     }
     
-    average_type die_measure(bool random_death_exists = 1) {
+    average_type die_measure() {
         age_type ages = 0;
         size_type deaths = 0;
         size_type nbefore = population_.size();
         for(auto it = population_.begin(); it != population_.end();) {
-            if((it -> is_dead()) or random_death(nmax_, nbefore)(*it)) {
+            if((it -> is_dead()) or animal_dies(nmax_, nbefore)(*it)) {
                 ages += it -> age();
                 ++deaths;
                 it = population_.erase(it); /// takes care of ++it
@@ -150,8 +145,6 @@ public:
     size_type nmax_; /// maximum number of animals
     
     container_type population_; /// I choose lists because I never want to access only one Animal
-
-    T distr_; /// random number distribution for the initial population
   };
 
 }

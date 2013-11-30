@@ -14,6 +14,7 @@ typedef unsigned int age_type;
 typedef double average_type; 
 typedef std::pair<average_type, size_type> age_size_pair;
 typedef Genome::randgen_type randgen_type;
+typedef Fishing::p_type p_type;
 
 randgen_type rng;
 
@@ -21,45 +22,65 @@ randgen_type rng;
 namespace var { 
     size_type nmax(10000);
     size_type n0(9000);
-    age_type years(2000);
-}
-
-// workaround for not having to type the template argument manually
-template<class U>
-Population<U> make_pop(U const & distr)
-{
-    return Population<U>(distr, rng, var::nmax, var::n0);
+    age_type years(5000);
+    p_type p1(0.075);
+    p_type p2(0.085);  
+    p_type p3(0.40); // you can fish out up to 40% of the adult population (that has already had the chance to reproduce) without destroying the population!
 }
 
 // setting up the parameters
-template<class U>
-Population<U> setup(size_type M, age_type T, age_type R, U const & distr) {
+Fishing setup(size_type M, age_type T, age_type R) {
     Genome::set_mutation_rate(M);
     Animal::set_bad_threshold(T);
     Animal::set_maturity_age(R);
-    return make_pop(distr);
+    return Fishing(rng, var::nmax, var::n0);
 }
 
 // measuring the size of the population each year
-template<class U>
-void measure_size(size_type M, age_type T, age_type R, std::string name, U const & distr) {
+void measure_size(size_type M, age_type T, age_type R, age_type a_min, std::string name) {
     
-    auto pop = setup(M, T, R, distr);
-    std::vector<size_type> size_values(var::years);
+    auto pop = setup(M, T, R);
+    std::vector<size_type> size_values;
+    pop.set_min_age(a_min);
     
     // iteration over the years
     for(age_type i = 0; i < var::years; ++i) {
         pop.add_year(rng);
-        size_values[i] = pop.size();
+        size_values.push_back(pop.size());
+    }
+    
+    // first fishing parameter
+    pop.set_f_probability(var::p1);
+    // iteration over the years
+    for(age_type i = 0; i < var::years; ++i) {
+        pop.add_year(rng);
+        size_values.push_back(pop.size());
+    }
+    
+    // second fishing parameter
+    pop.set_f_probability(var::p2);
+    // iteration over the years
+    for(age_type i = 0; i < var::years; ++i) {
+        pop.add_year(rng);
+        size_values.push_back(pop.size());
+    }
+    
+    // third fishing parameter
+    pop.set_f_probability(var::p3);
+    // iteration over the years
+    for(age_type i = 0; i < var::years; ++i) {
+        pop.add_year(rng);
+        size_values.push_back(pop.size());
     }
     
     // output
-    std::string mname = "m_";
+    std::string mname = "size_";
     mname.append(name).append(".txt");
     std::ofstream os;
     os.open(mname);
     os << "year population_size" << std::endl;
-    for(age_type i = 0; i < var::years; ++i) {
+    age_type N = size_values.size();
+    for(age_type i = 0; i < N; ++i) {
         os << i  << " " << size_values.at(i) << std::endl;
     }
     os.close();
@@ -69,25 +90,17 @@ void measure_size(size_type M, age_type T, age_type R, std::string name, U const
 
 int main(int argc, char* argv[]) {
     
-    std::string str = 10953ads86;
+    std::string str = "10953ads86";
     std::seed_seq seed1 (str.begin(),str.end());
     rng.seed(seed1);
     
-    std::uniform_int_distribution<unsigned int> distr1(0, Genome::number_of_genes);
-    //~ std::normal_distribution<double> distr2(32, 10);
     
     // population size measurements
-    measure_size(0, 2, 8, "0", distr1);
-    measure_size(8, 2, 8, "8", distr1);
-    std::cout << "finished 1st measurement" << std::endl;
+    measure_size(8, 2, 8, 0, "0");
+    measure_size(8, 2, 8, 9, "9"); // minimal age for fishing = reproduction age 
+    std::cout << "finished  measurement" << std::endl;
     
-    // measuring the age at death and population size 
-    measure_age_size(2, 4, distr1);
-    std::cout << "finished 2nd measurement" << std::endl;
-    
-    // measuring the gene distribution in steady - state
-    measure_genedistr(8, 2, 8, distr1);
-    std::cout << "finished 3rd measurement" << std::endl;
+
     
     return 0;
 }
