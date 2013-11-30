@@ -11,6 +11,7 @@
 #include <vector>
 #include <random>
 #include <functional> 
+#include <algorithm>
 
 namespace Penna {
 
@@ -95,11 +96,7 @@ public:
     
     // ages the whole population by one year
     void grow() {
-        for(auto it = population_.begin(); it != population_.end() ; ++it) {
-            it -> grow();
-        }
-      
-      //check out std::for_each
+        std::for_each(population_.begin(), population_.end(), std::mem_fun_ref(&Animal::grow));
     }
     
     // lets the mature animals generate offspring
@@ -112,9 +109,8 @@ public:
         }
         population_.splice(population_.end(), babies);
       
-      //check out std::transform
+      //check out std::transform (i couldn't figure out how to do this whilst passing the argument G)
     }
-    
 
     // kills dying animals 
     virtual void die() {

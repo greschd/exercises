@@ -29,8 +29,8 @@ public:
     age_type age() const;
     Genome const & get_genome() const; // return the Animal's Genome
 
-    // Make the animal grow older by n years (default: 1).
-    void grow(age_type = 1);
+    // Make the animal grow older by 1 year.
+    void grow();
     // Create a baby animal inheriting its genome from this except for some random mutations.
     Animal give_birth(randgen_type & G);
     

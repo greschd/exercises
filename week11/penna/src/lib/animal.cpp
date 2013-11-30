@@ -48,8 +48,8 @@ namespace Penna {
     }
     
     // Make the animal grow older by one year.
-    void Animal::grow(Animal::age_type n) {
-        age_ += n;
+    void Animal::grow() {
+        ++age_;
     }
     
     // Create a baby animal inheriting its genome from this except for some random mutations.
