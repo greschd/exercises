@@ -37,7 +37,7 @@ def measure(cpp_name, file_name):
     
     flags = " -std=c++11 -Wall -O3 -funroll-loops"
     
-    variables = " -DLOW=0 -DHIGH=10 -DNZERO=10 -DSTEPS=50 -DREPEATS=1000"
+    variables = " -DLOW=0 -DHIGH=10 -DNZERO=10 -DSTEPS=100 -DREPEATS=1000"
     
     name = cpp_name
     
@@ -75,8 +75,6 @@ def plot(name, index, title, res_h, res_fp, res_fo, res_v):
     plt.grid(True)
     plt.xlabel("N")
     plt.ylabel("time")
-    #~ plt.xscale('log')
-    #~ plt.yscale('log')
     plt.plot(res_h[0,:], res_h[index,:],'r+', label = "hard-coded")
     plt.plot(res_fp[0,:], res_fp[index,:],'b+', label = "function pointer")
     plt.plot(res_fo[0,:], res_fo[index,:],'g+', label = "function object")
@@ -89,12 +87,16 @@ def plot(name, index, title, res_h, res_fp, res_fo, res_v):
 
 def main():
     res_h = measure("hard_coded", "res_h")
+    print "measured the hard-coded version" 
     
     res_fp = measure("function_pointer", "res_fp")
+    print "measured the function pointer version"
     
     res_fo = measure("function_object", "res_fo")
+    print "measured the function object version"
     
     res_v = measure("virtual", "res_v")
+    print "measured the virtual function version"
     
     plot("one", 1, "f(x) = 1", res_h, res_fp, res_fo, res_v)
     
@@ -103,6 +105,7 @@ def main():
     plot("xsquare", 3, "f(x) = x^2", res_h, res_fp, res_fo, res_v)
     
     plot("sin", 4, "f(x) = sin(x)", res_h, res_fp, res_fo, res_v)
+    print "plots done"
     
 
 

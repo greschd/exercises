@@ -15,6 +15,7 @@ typedef unsigned int bin_type;
 #define STRINGIFY(X) STRINGIFY2(X)
 #define STRINGIFY2(X) #X
 
+// I use inline instead of writing every function separately because it is the same when compiled.
 inline result_type one(argument_type const & x)
 {
     return 1;
@@ -34,6 +35,7 @@ inline result_type mysin(argument_type const & x) {
     return std::sin(x);
 }
 
+// macro for the simpson function. creates 
 #define SIMPSON_DIRECT(FCT) \
 result_type simpson_direct(const argument_type & a,argument_type const & b,bin_type const & N){\
     /* Computing the step between two bins */\
