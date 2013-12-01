@@ -7,7 +7,7 @@
 #include <vector>
 #include <cmath>
 #include "../src/lib/timer/dg_timer.hpp"
-#include "../src/lib/virtual/simpson.hpp"
+#include "../src/lib/virtual/simpson.hpp" 
 
 #define FUNCTION_DEF FUN func;
 #define SIMPSONCALL simpson_virtual(func, a, b, n_new)

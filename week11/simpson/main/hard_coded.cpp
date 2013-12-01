@@ -59,54 +59,12 @@ result_type simpson_direct(const argument_type & a,argument_type const & b,bin_t
 
 SIMPSON_DIRECT(FUN)
 
+#define FUNCTION_DEF
+#define SIMPSONCALL simpson_direct(a, b, n_new)
+#include "../src/lib/measure/measure.hpp" 
+
 int main(int argc, char* argv[]) {
     
-    argument_type a = LOW;
-    argument_type b = HIGH;
-    bin_type N_0 = NZERO;
-    bin_type N = STEPS;
-    
-    std::vector<double> results;
-    std::vector<double> times;
-    std::vector<bin_type> bin_sizes;
-    
-    for(bin_type i = 0; i < N; ++i) {
-        result_type res = 0;
-        bin_type n_new = i * N_0 + 1;
-        tool::timer.start();
-        for(uint i = 0; i < REPEATS; ++i) {
-            res += simpson_direct(a, b, n_new);
-        }
-        tool::timer.stop();
-        results.push_back(res);
-        times.push_back(tool::timer.read());
-        bin_sizes.push_back(n_new);
-    }
-    
-    // to prevent the compiler from optimizing away the whole simpson function call (has proven to be unnecessary)
-    //~ std::cout << STRINGIFY(FUN) << "\t";
-    //~ for(bin_type i = 0; i < N; ++i) {
-        //~ std::cout << results.at(i) << " "; 
-    //~ }
-    //~ std::cout << std::endl;
-    
-    std::ofstream os;
-    os.open("res_h.txt", std::ios::app);
-    
-    std::string name = STRINGIFY(FUN);
-    if(name == "one") {
-        os << "N ";
-        for(bin_type i = 0; i < N; ++i) {
-            os << bin_sizes.at(i) << " " ;
-        }
-        os << std::endl;
-    }
-    
-    os << STRINGIFY(FUN) << "_times ";
-    for(bin_type i = 0; i < N; ++i) {
-        os << times.at(i) << " ";
-    }
-    os << std::endl;
-    os.close();
+    measure("res_h.txt");
     return 0;
 }

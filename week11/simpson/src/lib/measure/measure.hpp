@@ -5,6 +5,8 @@
 #ifndef __MEASURE_HEADER
 #define __MEASURE_HEADER
 
+
+// turns a define into string
 #ifndef STRINGIFY
 #define STRINGIFY(X) STRINGIFY2(X)
 #ifndef STRINGIFY2
@@ -14,17 +16,21 @@
 
 void measure(std::string file_name) {
     
-    FUNCTION_DEF
+    FUNCTION_DEF // is used by virtual and function_object to initialize the function
     
+    // getting the variables from the externally defined macros
     argument_type a = LOW;
     argument_type b = HIGH;
     bin_type N_0 = NZERO;
     bin_type N = STEPS;
     
+    // making the measurement containers
     std::vector<double> results;
     std::vector<double> times;
     std::vector<bin_type> bin_sizes;
     
+    
+    // timing measurement
     for(bin_type i = 0; i < N; ++i) {
         result_type res = 0;
         bin_type n_new = i * N_0 + 1;
@@ -38,6 +44,8 @@ void measure(std::string file_name) {
         bin_sizes.push_back(n_new);
     }
     
+    
+    // output 
     std::ofstream os;
     os.open(file_name, std::ios::app);
     
