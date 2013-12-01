@@ -1,2 +1,2 @@
-plot: ../main/benchmark.py ../main/hard_coded.cpp
+plot: ../main/benchmark.py 
 	python $<
