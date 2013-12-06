@@ -15,7 +15,7 @@ set(LIBRARY_PATH src/lib/)
 set(EXECUTABLE_PATH simulation/)
 
 # FLAGS
-add_definitions(-Wall -std=c++11)
+add_definitions(-Wall -funroll-loops -std=c++11 -pg)
 
 # including directories and adding libraries
 include_directories("${PROJECT_SOURCE_DIR}/src/lib/")
@@ -26,6 +26,7 @@ add_library(genome ${LIB_TYPE} ${LIBRARY_PATH}/genome.cpp)
 # compiling the simulation
 add_executable(simulation.x ${EXECUTABLE_PATH}simulation.cpp)
 target_link_libraries(simulation.x genome animal)
+SET(CMAKE_EXE_LINKER_FLAGS  -pg)
 
 # plots
 add_custom_command(OUTPUT size_0.txt COMMAND ./simulation.x DEPENDS simulation.x) 

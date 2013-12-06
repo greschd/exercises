@@ -45,13 +45,15 @@ result_type simpson_direct(const argument_type & a,argument_type const & b,bin_t
     result_type sum(0);\
     const result_type a_new = a + step / 2;\
     for(bin_type i = 0; i < N ; ++i){\
-        sum += FCT(a_new + i * step);\
+        result_type temp = FCT(a_new + i * step);\
+        sum += temp;\
         }\
     sum *= 2; \
     \
     /* Adding the rest, except the boundaries */\
     for(bin_type j = 1; j < N; ++j){\
-        sum += FCT(a + j * step);\
+        result_type temp = FCT(a + j * step);\
+        sum += temp;\
         }\
     \
     /* Adding the boundaries & factor, return */\

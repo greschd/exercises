@@ -22,7 +22,7 @@ randgen_type rng;
 namespace var { 
     size_type nmax(10000);
     size_type n0(9000);
-    age_type years(5000);
+    age_type years(500);
     p_type p1(0.075);
     p_type p2(0.085);  
     p_type p3(0.40); // you can fish out up to 40% of the adult population (that has already had the chance to reproduce) without destroying the population!

@@ -17,6 +17,8 @@ typedef double* matrix_type;
     #define ITER 1000
 #endif
 
+
+template<bool F>
 void multiply(const matrix_type& A, const matrix_type& B, matrix_type& C)
 {
     for(int i = 0; i < N; ++i) {
@@ -28,5 +30,7 @@ void multiply(const matrix_type& A, const matrix_type& B, matrix_type& C)
         }
     }
 }
+
+
 
 #include "main.cpp"

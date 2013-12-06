@@ -14,6 +14,7 @@
 
 #include <assert.h>
 #include <limits>
+#include <stdexcept>
 
 
 template <class T, bool F>
@@ -40,6 +41,9 @@ public:
 
 template <class T>
 typename result_type<T>::type simpson(func_class const & func, T const & a, T const & b, const int & N) {
+    if(N == 0) {
+        throw std::range_error("zero steps not allowed");
+    }
     // asserting valid function parameters 
     assert(N > 0);   
     
