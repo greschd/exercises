@@ -10,16 +10,16 @@ import os
 
 def main():
     # versions of the matrix multiplication and the libraries they need to link with
-    versions = [["simple",""],["meta",""]["library"," -L/home/greschd/src/ATLAS_3.11/LINUX_13.04/lib/ -lf77blas -latlas -lgfortran"]]
+    versions = [["simple",""],["meta",""],["blocking"," -DR=16"],["library"," -L/home/greschd/src/ATLAS_3.11/LINUX_13.04/lib/ -lf77blas -latlas -lgfortran"]]
     
     compiler = "g++"
     flags = " -std=c++11 -Wall -O3 -funroll-loops -ftemplate-depth=1500"
     
     variables = []
     
-    for i in range(1, 11):
+    for i in range(1, 10):
         num = str(2**i)
-        iterations = str(2**(30 - 3 * i))
+        iterations = str(2**(29 - 3 * i))
         variables.append(" -DN=" + num + " -DITER=" + iterations)
     
     for f in versions:

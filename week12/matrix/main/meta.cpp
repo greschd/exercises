@@ -11,10 +11,10 @@
 typedef double* matrix_type;
 
 #ifndef N
-    #define N 1000
+    #define N 1024
 #endif
 #ifndef ITER
-    #define ITER 1000
+    #define ITER 10
 #endif
 
 template<int J>
@@ -33,6 +33,13 @@ struct meta_addj<0> {
 };
 
 void multiply(const matrix_type& A, const matrix_type& B, matrix_type& C) {  
+    //setting C to zero
+    for(int i = 0; i < N; ++i) {
+        for(int j = 0; j < N; ++j) {
+            C[i * N + j] = 0;
+        }
+    }
+    
     for(int i = 0; i < N; ++i) {
         for(int k = 0; k < N; ++k) {
             double temp = A[i * N + k];

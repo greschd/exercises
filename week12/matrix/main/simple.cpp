@@ -17,8 +17,13 @@ typedef double* matrix_type;
     #define ITER 1000
 #endif
 
-void multiply(const matrix_type& A, const matrix_type& B, matrix_type& C)
-{
+void multiply(const matrix_type& A, const matrix_type& B, matrix_type& C) {   
+    //setting C to zero
+    for(int i = 0; i < N; ++i) {
+        for(int j = 0; j < N; ++j) {
+            C[i * N + j] = 0;
+        }
+    }
     for(int i = 0; i < N; ++i) {
         for(int k = 0; k < N; ++k) {
             double temp = A[i * N + k];

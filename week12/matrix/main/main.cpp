@@ -5,6 +5,10 @@
 #ifndef __MAIN_FILE
 #define __MAIN_FILE
 
+#ifndef TESTING
+    #define TESTING false
+#endif 
+
 void set(matrix_type& A, matrix_type& B)
 {
     for (int i=0; i<N; ++i) {
@@ -38,31 +42,36 @@ int main()
     /*------------------------------*/
     /*            timing            */
     /*------------------------------*/
-    timeval start, end;
-    gettimeofday(&start, NULL);
     
-    for (int i = 0; i < num_iter; ++i) {
-        multiply(A, B, C);
+    if(!TESTING) {
+        timeval start, end;
+        gettimeofday(&start, NULL);
+        
+        for (int i = 0; i < num_iter; ++i) {
+            multiply(A, B, C);
+        }
+        
+        gettimeofday(&end, NULL);
+        
+        std::cout << "size: " << N << " time: " << (end.tv_sec - start.tv_sec)+1e-6*(end.tv_usec - start.tv_usec) << std::endl;
     }
-    
-    gettimeofday(&end, NULL);
-    
-    std::cout << "size: " << N << " time: " << (end.tv_sec - start.tv_sec)+1e-6*(end.tv_usec - start.tv_usec) << std::endl;
     
     
     /*------------------------------*/
     /*            testing           */
     /*------------------------------*/
-    //~ multiply(A, B, C);
-    //~ 
-    //~ std::cout << "A: " << std::endl;
-    //~ print(A);
-    //~ 
-    //~ std::cout << "B: " << std::endl;
-    //~ print(B);
-    //~ 
-    //~ std::cout << "C:" << std::endl;
-    //~ print(C);
+    if(TESTING) {
+        multiply(A, B, C);
+        
+        std::cout << "A: " << std::endl;
+        print(A);
+        
+        std::cout << "B: " << std::endl;
+        print(B);
+        
+        std::cout << "C:" << std::endl;
+        print(C);
+    }
 
     delete[] A;
     delete[] B;

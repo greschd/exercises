@@ -11,10 +11,10 @@
 typedef double* matrix_type;
 
 #ifndef N
-    #define N 1000
+    #define N 1024
 #endif
 #ifndef ITER
-    #define ITER 1000
+    #define ITER 10
 #endif
 
 extern "C" {
