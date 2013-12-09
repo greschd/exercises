@@ -82,7 +82,7 @@ def measure():
         optima.append([to_number(e[0]), " " + e[1]])
     
     # performing the measurements
-    versions = [["simple","","simple version"],["meta","","meta-unroll-loop"],["blocking","", "Blocking"],["library"," -L/home/greschd/src/ATLAS_3.11/LINUX_13.04/lib/ -lf77blas -latlas -lgfortran","Fortran library"]]
+    versions = [["simple","","simple version"],["blocking","", "Blocking"],["library"," -L/home/greschd/src/ATLAS_3.11/LINUX_13.04/lib/ -lf77blas -latlas -lgfortran","Fortran library"]]
 
     variables = []
     
