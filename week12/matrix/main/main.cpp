@@ -47,13 +47,13 @@ int main()
         timeval start, end;
         gettimeofday(&start, NULL);
         
-        for (int i = 0; i < num_iter; ++i) {
+        for (int i = 0; i < num_iter ; ++i) {
             multiply(A, B, C);
         }
         
         gettimeofday(&end, NULL);
         
-        std::cout << "size: " << N << " time: " << (end.tv_sec - start.tv_sec)+1e-6*(end.tv_usec - start.tv_usec) << std::endl;
+        std::cout << "size: " << N << ", time: " << (end.tv_sec - start.tv_sec)+1e-6*(end.tv_usec - start.tv_usec) << std::endl;
     }
     
     
