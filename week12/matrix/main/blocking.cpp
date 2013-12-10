@@ -45,7 +45,7 @@ inline void multiply_template(const matrix_type & A, const matrix_type & B, matr
 // computing the partial matrix product
 inline void multiply_part(matrix_type const & A, matrix_type const & D, matrix_type & C, index_type const & I, index_type const & J, index_type const & K) {
     for(index_type i = 0; i < R; ++i) {
-        for(index_type k = 0; k < R ; k += 8) {
+        for(index_type k = 0; k < R ; k += 4) {
             double temp0 = A[(i + R * I) * N + k + R * K];
             double temp1 = A[(i + R * I) * N + k + 1 + R * K];
             double temp2 = A[(i + R * I) * N + k + 2 + R * K];
