@@ -25,7 +25,7 @@ def to_number(string):
 def tune():
     # versions of the matrix multiplication, their flags and names (different block sizes)
     versions = []
-    for i in range(2,9):
+    for i in range(4,10):
         num = str(2**i)
         versions.append(["blocking", " -DR=" + num, "Blocking with block size = " + num])
     

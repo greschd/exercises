@@ -18,7 +18,7 @@ typedef int index_type;
     #define ITER 10
 #endif
 #ifndef R
-    #define R 1
+    #define R 4 // R must be a multiple of 4
 #endif
 
 
@@ -45,10 +45,14 @@ inline void multiply_template(const matrix_type & A, const matrix_type & B, matr
 // computing the partial matrix product
 inline void multiply_part(matrix_type const & A, matrix_type const & D, matrix_type & C, index_type const & I, index_type const & J, index_type const & K) {
     for(index_type i = 0; i < R; ++i) {
-        for(index_type k = 0; k < R; ++k) {
-            double temp = A[(i + R * I) * N + k + R * K];
-            for(index_type j = 0; j < R; ++j) {
-                C[(i + R * I) * N + j + R * J] += temp * D[K * N * R + J * R * R + k * R + j]; 
+        for(index_type k = 0; k < R ; k += 8) {
+            double temp0 = A[(i + R * I) * N + k + R * K];
+            double temp1 = A[(i + R * I) * N + k + 1 + R * K];
+            double temp2 = A[(i + R * I) * N + k + 2 + R * K];
+            double temp3 = A[(i + R * I) * N + k + 3 + R * K];
+            for(index_type j = 0; j < R ; ++j) {
+                C[(i + R * I) * N + j + R * J] += temp0 * D[K * N * R + J * R * R + k * R + j] + temp1 * D[K * N * R + J * R * R + (k + 1) * R + j]
+                                                + temp2 * D[K * N * R + J * R * R + (k + 2) * R + j] + temp3 * D[K * N * R + J * R * R + (k + 3) * R + j]; 
             }
         }
     }
@@ -87,7 +91,7 @@ inline void multiply_template<true>(matrix_type const & A, matrix_type const & B
 
 
 inline void multiply(matrix_type const & A, matrix_type const & B, matrix_type & C) {
-    multiply_template<(N % R) == 0>(A, B, C);
+    multiply_template<((N % R) == 0 && R % 8 == 0)>(A, B, C);
 }
 
 
