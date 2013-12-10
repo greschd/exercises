@@ -91,7 +91,7 @@ inline void multiply_template<true>(matrix_type const & A, matrix_type const & B
 
 
 inline void multiply(matrix_type const & A, matrix_type const & B, matrix_type & C) {
-    multiply_template<((N % R) == 0 && R % 8 == 0)>(A, B, C);
+    multiply_template<((N % R) == 0 && R % 4 == 0)>(A, B, C);
 }
 
 
