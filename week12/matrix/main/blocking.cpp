@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <vector>
 #include <sys/time.h>
+#include <omp.h>
 
 typedef double* matrix_type;
 typedef int index_type;
@@ -18,7 +19,7 @@ typedef int index_type;
     #define ITER 10
 #endif
 #ifndef R
-    #define R 4 // R must be a multiple of 4
+    #define R 4 
 #endif
 
 
@@ -80,6 +81,7 @@ inline void multiply_template<true>(matrix_type const & A, matrix_type const & B
     
     // multiplying the blocks
     for(index_type i = 0; i < N / R; ++i) {
+        #pragma omp parallel for
         for(index_type j = 0; j < N / R; ++j) {
             for(index_type k = 0; k < N / R; ++k) {
                 multiply_part(A, D, C, i, j, k);

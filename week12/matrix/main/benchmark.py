@@ -37,7 +37,7 @@ def tune():
         variables.append([num, iterations])
         
     compiler = "g++"
-    flags = " -std=c++11 -Wall -O3 -funroll-loops"
+    flags = " -fopenmp -std=c++11 -Wall -O3 -funroll-loops"
     
     # checking the speed of the versions 
     timings = []
@@ -92,7 +92,7 @@ def measure():
         variables.append([num, iterations])
     
     compiler = "g++"
-    flags = " -std=c++11 -Wall -O3 -funroll-loops -ftemplate-depth=1500"
+    flags = " -fopenmp -std=c++11 -Wall -O3 -funroll-loops -ftemplate-depth=1500"
     
     
     for f in versions:
