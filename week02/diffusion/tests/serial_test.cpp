@@ -2,11 +2,15 @@
 // Date:    06.10.2014 00:37:45 CEST
 // File:    serial_test.cpp
 
-#include "diffusion_serial.hpp"
+#include "../src/common.hpp"
+#include "../src/serial.hpp"
 
+#include <cmath>
 #include <iostream>
 
-using namespace serial;
+using namespace diffusion;
+using namespace diffusion::serial;
+
 int main(int argc, char* argv[]) {
     
     count_t mesh_size = 128;
@@ -26,12 +30,12 @@ int main(int argc, char* argv[]) {
     count_t num_steps(0.5 / tau);
     
     print(rho);
-    diffusion(rho, tau, D, delta, num_steps);
+    iter(rho, tau, D, delta, num_steps);
     print(rho);
-    diffusion(rho, tau, D, delta, num_steps);
+    iter(rho, tau, D, delta, num_steps);
     print(rho);
-    diffusion(rho, tau, D, delta, num_steps);
-    diffusion(rho, tau, D, delta, num_steps);
+    iter(rho, tau, D, delta, num_steps);
+    iter(rho, tau, D, delta, num_steps);
     print(rho);
     
     return 0;

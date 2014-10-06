@@ -33,13 +33,14 @@ namespace barrier{
                 }
             }
             else {
-                while(counter_ < num_threads_){}
+                while(counter_ < num_threads_){ 
+                }
             }
         }
         
     private:
         const count_t num_threads_;
-        count_t counter_;
+        volatile count_t counter_;
         std::mutex counter_mutex_;
     };
 }

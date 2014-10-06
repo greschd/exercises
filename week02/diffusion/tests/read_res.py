@@ -38,6 +38,6 @@ def read(name, savename):
     plt.close()
 
 if __name__ == "__main__":
-    read("res_1.txt", "figure")
+    read("res_2.txt", "figure")
     print("read_res.py")
     
