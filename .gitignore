@@ -1,5 +1,9 @@
+**/*.pyc
+*__pycache__*
 pdf
 *.out
 *.txt
 build
 plots
+python_tools/.git
+python_tools/.gitignore
