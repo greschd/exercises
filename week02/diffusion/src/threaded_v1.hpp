@@ -23,7 +23,7 @@ namespace diffusion {
         // factor = tau * D / delta^2
         // edge values = boundary condition (not updated)
         // rho / rho_new of size (n+2)x(m+2)
-        void single_iter (  density_t const & rho, 
+        void single_iter (  density_t & rho, 
                             density_t & rho_new, 
                             res_t const & factor, 
                             res_t const & factor2,
@@ -71,7 +71,7 @@ namespace diffusion {
             for(count_t i = 0; i < num_steps; ++i) {
                 for(count_t j = 0; j < num_threads - 1; ++j) {
                     threads[j] = std::thread(   single_iter, 
-                                                rho, 
+                                                std::ref(rho), 
                                                 std::ref(rho_new), 
                                                 factor, 
                                                 factor2, 

@@ -5,6 +5,7 @@
 #ifndef ___HEADER
 #define ___HEADER
 
+#include <omp.h>
 #include <cmath>
 #include <vector>
 #include <iostream>
@@ -36,7 +37,10 @@ public:
     }
     
     void iterate(count_t num_steps) {
+        #pragma omp parallel
         for(count_t n = 0; n < num_steps; ++n) {
+            // tried collapse(2), different schedules
+            #pragma omp for 
             for(count_t i = 0; i < N_; ++i) {
                 for(count_t j = 0; j < N_; ++j) {
                     rho2_[i*N_ + j] = f2_ * rho_[i*N_ + j] +
@@ -46,7 +50,11 @@ public:
                             (i == 0    ? 0. : rho_[(i-1)*N_ + j]));
                 }
             }
+            #pragma omp barrier
+            #pragma omp single
             std::swap(rho2_, rho_);
+            
+            #pragma omp barrier
         }
     }
     
