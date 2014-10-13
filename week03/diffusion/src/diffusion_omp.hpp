@@ -65,9 +65,30 @@ public:
             }
             std::cout << "\\";
         }
-    std::cout << "end";
-}
+        std::cout << "end";
+    }
+
+    val_t N() const {
+        val_t res = 0;
+        #pragma omp parallel for reduction(+:res)
+        for(count_t i = 0; i < Ntot_; ++i) {
+            res += rho_[i];
+        }
+        return res * delta_ * delta_;
+    }    
     
+    val_t musquare() const {
+        val_t res = 0;
+        #pragma omp parallel for reduction(+:res)
+        for(count_t i = 0; i < N_; ++i) {
+            for(count_t j = 0; j < N_; ++j) {
+                res +=  rho_[i*N_ + j] * 
+                        ((i * delta_ - 1.) * (i * delta_ - 1.) +
+                        (j * delta_ - 1.) * (j * delta_ - 1.)); 
+            }
+        }
+        return res * delta_ * delta_;
+    }
     
 private:
     // size of rho
