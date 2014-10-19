@@ -32,9 +32,9 @@ if __name__ == "__main__":
 
     ax = plt.subplot(111)
     ax.set_xscale("log")
-    plt.errorbar(N, res, yerr=stddev, label='standard deviation', fmt='o')
+    #~ plt.errorbar(N, res, yerr=stddev, label='standard deviation', fmt='o')
     plt.errorbar(N, res, yerr=mean_err, label='standard error of the mean', fmt='o')
-    plt.legend()
+    #~ plt.legend()
     plt.xlabel('N', fontsize = 15)
     ax.axhline(0.3, color = 'r')
     plt.ylabel(r'$\rho$', fontsize=15, rotation = "horizontal", horizontalalignment = "left")
