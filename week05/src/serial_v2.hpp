@@ -91,13 +91,15 @@ namespace serial_v2 {
                 i_x = grid_index(proposal.x);
                 i_y = grid_index(proposal.y);
                 // check disks in this and neighbouring grid tiles
-                if (check_neighbours(proposal, i_x, i_y) and
-                    check_neighbours(proposal, ((i_x == 0) ? grid_size_ - 1: i_x - 1), i_y) and
-                    check_neighbours(proposal, i_x, ((i_y == 0) ? grid_size_ - 1: i_y - 1)) and
-                    check_neighbours(proposal, ((i_x == 0) ? grid_size_ - 1 : i_x - 1), ((i_y == 0) ? grid_size_ - 1 : i_y - 1)) and
-                    check_neighbours(proposal, ((i_x == grid_size_ - 1) ? 0: i_x + 1), i_y) and
-                    check_neighbours(proposal, i_x, ((i_y == grid_size_ - 1) ? 0: i_y + 1)) and
-                    check_neighbours(proposal, ((i_x == grid_size_ - 1) ? 0 : i_x + 1), ((i_y == grid_size_ - 1) ? 0 : i_y + 1))) {
+                if (check_neighbours(current, proposal, i_x, i_y) and
+                    check_neighbours(current, proposal, i_x, int(i_y) - 1) and
+                    check_neighbours(current, proposal, i_x, i_y + 1) and
+                    check_neighbours(current, proposal, int(i_x) - 1, i_y) and
+                    check_neighbours(current, proposal, int(i_x) - 1, int(i_y) - 1) and
+                    check_neighbours(current, proposal, int(i_x) - 1, i_y + 1) and
+                    check_neighbours(current, proposal, i_x + 1, i_y) and
+                    check_neighbours(current, proposal, i_x + 1, int(i_y) - 1) and
+                    check_neighbours(current, proposal, i_x + 1, i_y + 1)) {
                     // all checks passed -> accept proposal
                     if(i_x != i_x_old or i_y != i_y_old) {
                         proposal.index_x = i_x;
@@ -147,10 +149,14 @@ namespace serial_v2 {
         }
 
         // check if any of the points at grid tile (i, j) overlap a.
-        bool check_neighbours(IndexedPoint const & a, count_t const & i, count_t const & j) const {
+        // i, j need to be signed integers
+        bool check_neighbours(count_t const & exclude_index, IndexedPoint const & a, int const & i, int const & j) const {
             val_t xdist;
             val_t ydist;
-            for(auto p: grid_[i][j]) {
+            for(auto p: grid_[mod(i, grid_size_)][mod(j, grid_size_)]) {
+                if(p == exclude_index) {
+                    continue;
+                }
                 xdist = to_dist(disks_[p].x - a.x);
                 ydist = to_dist(disks_[p].y - a.y);
                 if((xdist * xdist + ydist * ydist) < d0sq_) {
@@ -158,6 +164,10 @@ namespace serial_v2 {
                 }
             }
             return true;
+        }
+
+        int mod(int const & x, int const & y) const {
+            return ((x % y) + y) % y;
         }
 
 

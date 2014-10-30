@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     count_t S(atoi(argv[5]));
 
     std::vector<std::vector<count_t>> res;
-    count_t num_measure = 1;
+    count_t num_measure = 10;
 
     System disks(Nx, Ny, d0, alpha, rng);
 

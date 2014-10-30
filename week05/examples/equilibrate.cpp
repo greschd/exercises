@@ -3,10 +3,12 @@
 // File:    equilibrate.cpp
 
 #include "../src/serial.hpp"
+#include "../src/serial_v2.hpp"
+#include "../src/omp_version.hpp"
 
 #include <iostream>
 
-using namespace serial;
+using namespace IMPL_TYPE;
 
 int main(int argc, char* argv[]) {
     rng_t rng(42);

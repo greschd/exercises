@@ -6,7 +6,7 @@
 # File:    plot.py
 
 import sys
-sys.path.append("../python_tools")
+sys.path.append("../../python_tools")
 from plot_setup import *
 
 import numpy as np
