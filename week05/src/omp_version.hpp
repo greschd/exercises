@@ -2,8 +2,8 @@
 // Date:    29.10.2014 17:57:40 CET
 // File:    serial.hpp
 
-#ifndef __OMP_HEADER
-#define __OMP_HEADER
+#ifndef __OMP_DISKS_HEADER
+#define __OMP_DISKS_HEADER
 
 #include "common.hpp"
 
@@ -14,11 +14,11 @@
 #include <vector>
 #include <iostream>
 
-namespace omp {
+namespace omp_version {
 
     struct IndexedPoint {
-        count_t x;
-        count_t y;
+        val_t x;
+        val_t y;
         count_t index_x;
         count_t index_y;
     };
@@ -112,28 +112,30 @@ namespace omp {
         }
 
         std::vector<count_t> measure() const{
-            print();
-            //~ std::vector<count_t> res(512);
-            //~ std::vector<count_t> res_loc(512);
-            //~ #pragma omp parallel for private(res_loc) 
-            //~ for(count_t i = 0; i < N_ - 1; ++i) {
-                //~ for(count_t j = i + 1; j < N_; ++j) {
-                    //~ #pragma omp critical
-                    //~ {
-                    //~ std::cout << i << ", " << j << ", " << hist_index(disks_.at(i), disks_.at(j)) << std::endl;
-                        //~ 
-                    //~ }
-                    //~ ++res_loc.at(hist_index(disks_.at(i), disks_.at(j)));
-                //~ }
-            //~ }
-            //~ #pragma omp critical
-            //~ {
-                //~ for(count_t i = 0; i < 512; ++i) {
-                    //~ res[i] += res_loc[i];
-                //~ }
-            //~ }
-            //~ return res;
-            return std::vector<count_t>();
+            std::vector<count_t> res(512);
+            /* Spent quite some time debugging this.. apparently only
+             * data structures whose size is known at compile - time can
+             * be private.
+             * IMHO that might be a piece of information worthy of
+             * being mentioned in the lecture slides.
+             */
+            count_t res_loc[512];
+            #pragma omp parallel private(res_loc) shared(res)
+            {
+                #pragma omp for
+                for(count_t i = 0; i < N_ - 1; ++i) {
+                    for(count_t j = i + 1; j < N_; ++j) {
+                        ++res_loc[hist_index(disks_[i], disks_[j])];
+                    }
+                }
+                #pragma omp critical
+                {
+                    for(count_t i = 0; i < 512; ++i) {
+                        res[i] += res_loc[i];
+                    }
+                }
+            }
+            return res;
         }
         
 
@@ -150,17 +152,12 @@ namespace omp {
 
         // returns the index in the histogram of the distance ab
         count_t hist_index(IndexedPoint const & a, IndexedPoint const & b) const {
-            std::cout << a.x << std::endl;
-            std::cout << b.x << std::endl;
             val_t xdist(to_dist(a.x - b.x));
             val_t ydist(to_dist(a.y - b.y));
-            //~ std::cout << xdist << std::endl;
-            //~ std::cout << ydist << std::endl;
             xdist *= xdist;
             ydist *= ydist;
 
-            //~ std::cout << (xdist + ydist - d0sq_) << std::endl;
-            return std::floor((xdist + ydist - d0sq_) * hist_factor_);
+            return std::min(count_t(std::floor((xdist + ydist - d0sq_) * hist_factor_)), count_t(511));
         }
 
         // returns the grid index for a given coordinate
@@ -182,7 +179,6 @@ namespace omp {
             return true;
         }
 
-
         // private variables
         const count_t N_;
         const val_t d0sq_;
@@ -200,5 +196,5 @@ namespace omp {
     };
 } // end namespace omp
 
-#endif //__OMP_HEADER
+#endif //__OMP_DISKS_HEADER
 

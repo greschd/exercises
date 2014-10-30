@@ -16,8 +16,8 @@
 namespace serial_v2 {
 
     struct IndexedPoint {
-        count_t x;
-        count_t y;
+        val_t x;
+        val_t y;
         count_t index_x;
         count_t index_y;
     };

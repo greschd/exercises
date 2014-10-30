@@ -2,7 +2,7 @@
 // Date:    29.10.2014 18:11:21 CET
 // File:    timing.cpp
 
-#include "../src/omp.hpp"
+#include "../src/omp_version.hpp"
 #include "../src/serial.hpp"
 #include "../src/serial_v2.hpp"
 
@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     count_t S(atoi(argv[5]));
 
     std::vector<std::vector<count_t>> res;
-    count_t num_measure = 10;
+    count_t num_measure = 1;
 
     System disks(Nx, Ny, d0, alpha, rng);
 
@@ -31,10 +31,9 @@ int main(int argc, char* argv[]) {
     double measure_time(0);
     // create clock
     std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-    
+
     // equilibrate
     disks.sweep(Sequi);
-
     // measure
     for(count_t i = 0; i < num_measure; ++i) {
         // sweep clock
@@ -43,8 +42,6 @@ int main(int argc, char* argv[]) {
         end = std::chrono::high_resolution_clock::now();
         sweep_time += std::chrono::duration<double>(end - start).count();
         // end sweep clock
-
-        disks.print()
         
         // measure clock
         start = std::chrono::high_resolution_clock::now();
