@@ -1,0 +1,139 @@
+// Author:  Dominik Gresch <greschd@ethz.ch>
+// Date:    06.10.2014 02:43:58 CEST
+// File:    diffusion_mpi.hpp
+
+#ifndef __DIFFUSION_MPI_HEADER
+#define __DIFFUSION_MPI_HEADER
+
+#include <mpi.h>
+#include <cmath>
+#include <vector>
+#include <iostream>
+
+typedef int count_t;
+typedef double val_t;
+typedef std::vector<val_t> density_t;
+
+template<typename T>
+class Accumulator {
+    using res_t = decltype(T() / double());
+public:
+    Accumulator(): res_(0), square_(0) {};
+
+    void operator<<(T const & t) {
+        res_ += t;
+        square_ += t * t;
+        ++N_;
+    }
+
+    res_t avg() const {
+        return res_ / double(N_);
+    }
+
+    res_t square() const {
+        return square_ / double(N_);
+    }
+
+    auto res() const {
+        return std::pair<res_t, res_t>(avg(), square());
+    }
+    
+private:
+    T res_;
+    T square_;
+    count_t N_;
+};
+
+class DiffusionMPI {
+public:
+    DiffusionMPI(   count_t const & N, 
+                    val_t const & tau,
+                    val_t const & D
+                    ):   N_(N), 
+                        Ntot_(N*N), 
+                        rho_(density_t(Ntot_)), 
+                        rho2_(density_t(Ntot_)),
+                        delta_(2. / (N - 1)),
+                        f1_(tau * D / (delta_ * delta_)),
+                        f2_(1. - 4. * f1_),
+                        n_(),
+                        u_sq_(){
+        // initialize rho
+        for(count_t i = 0; i < N_; ++i) {
+            for(count_t j = 0; j < N_; ++j) {
+                if((fabs(delta_*i - 1.) < 0.5) && (fabs(delta_*j - 1.) < 0.5)) {
+                    rho_[i*N_ + j] = 1;
+                }
+            }
+        }
+    }
+    
+    void iterate(count_t num_steps) {
+        for(count_t n = 0; n < num_steps; ++n) {
+            for(count_t i = 0; i < N_; ++i) {
+                for(count_t j = 0; j < N_; ++j) {
+                    rho2_[i*N_ + j] = f2_ * rho_[i*N_ + j] +
+                    f1_ * ( (j == N_-1 ? 0. : rho_[i*N_ + (j+1)]) +
+                            (j == 0    ? 0. : rho_[i*N_ + (j-1)]) +
+                            (i == N_-1 ? 0. : rho_[(i+1)*N_ + j]) +
+                            (i == 0    ? 0. : rho_[(i-1)*N_ + j]));
+                }
+            }
+            std::swap(rho2_, rho_);
+            
+        }
+    }
+    
+    void print() const{
+        for(count_t i = 0; i < N_; ++i) {
+            for(count_t j = 0; j < N_; ++j) {
+                std::cout << rho_[i * N_ + j] << " ";
+            }
+            std::cout << "\\";
+        }
+        std::cout << "end";
+    }
+    
+    void measure() {
+        val_t res_n(0);
+        val_t res_u_sq(0);
+        for(count_t i = 0; i < N_; ++i) {
+            for(count_t j = 0; j < N_; ++j) {
+                res_n += rho_[i*N_ + j];
+                res_u_sq +=  rho_[i*N_ + j] * 
+                             ((i * delta_ - 1.) * (i * delta_ - 1.) +
+                             (j * delta_ - 1.) * (j * delta_ - 1.)); 
+            }
+        }
+        n_ << res_n;
+        u_sq_ << res_u_sq;
+    }
+
+    auto n() const {
+        return n_.res();
+    }
+    
+    auto u_sq() const {
+        return u_sq_.res();
+    }
+    
+private:
+    // size of rho
+    count_t N_, Ntot_;
+
+    density_t rho_;
+    density_t rho2_;
+    
+    val_t delta_;
+    // tau * D / (delta)^2
+    val_t f1_;
+    // 1 - 4*f1
+    val_t f2_;
+
+    // results
+    Accumulator<val_t> n_;
+    Accumulator<val_t> u_sq_;
+};
+
+#endif //__DIFFUSION_MPI_HEADER
+
