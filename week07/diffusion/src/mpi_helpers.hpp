@@ -12,40 +12,76 @@
 
 typedef double val_t;
 
-/// send_vec and rec_vec must have the same length
-void exchange(  std::vector<val_t> & send_vec,
+struct Wait {
+    void wait() {
+        MPI_Waitall(2, r, s);
+    }
+
+    MPI_Request r[2];
+    MPI_Status s[2];
+};
+
+class Exchange {
+public:
+    Exchange(   std::vector<val_t> & send_vec,
                 std::vector<val_t> & rec_vec,
                 int const & receiver,
-                int const & tag) {
-    // get buffers
-    int size_double;
-    MPI_Pack_size(1, MPI_DOUBLE, MPI_COMM_WORLD, &size_double);
-    int send_buffer_size = send_vec.size() * size_double;
-    int rec_buffer_size = rec_vec.size() * size_double;
-    char* send_buffer = new char[send_buffer_size];
-    char* rec_buffer = new char[rec_buffer_size];
-
-    // PACK send_vec
-    int pos(0);
-    for(auto & x: send_vec) {
-        MPI_Pack(&x, 1, MPI_DOUBLE, send_buffer, send_buffer_size, &pos, MPI_COMM_WORLD);
-        assert(pos <= send_buffer_size);
-    }
-
-    MPI_Status status;
-    MPI_Sendrecv(send_buffer, send_buffer_size, MPI_PACKED, receiver, tag,
-                 rec_buffer, rec_buffer_size, MPI_PACKED, receiver, tag,
-                 MPI_COMM_WORLD, &status);
-
-    // UNPACK
-    for(auto & x: rec_vec) {
-        int pos(0);
-        MPI_Unpack(rec_buffer, rec_buffer_size, &pos, &x, 1, MPI_DOUBLE, MPI_COMM_WORLD);
-        assert(pos <= rec_buffer_size);
-    }
+                int const & tag):
+                    send_vec_(send_vec),
+                    rec_vec_(rec_vec),
+                    receiver_(receiver),
+                    tag_(tag),
+                    w_() {
+        // get buffers
+        int size_double;
+        MPI_Pack_size(1, MPI_DOUBLE, MPI_COMM_WORLD, &size_double);
+        send_buffer_size_ = send_vec.size() * size_double;
+        rec_buffer_size_ = rec_vec.size() * size_double;
+        send_buffer_ = new char[send_buffer_size_];
+        rec_buffer_ = new char[rec_buffer_size_];
+    };
     
-    delete[] send_buffer;
-    delete[] rec_buffer;
-}
+    ~Exchange() {
+        delete[] send_buffer_;
+        delete[] rec_buffer_;
+    }
+
+    void test() {
+        std::cout << "msg to receiver " << receiver_ << " with tag " << tag_ << std::endl;
+    }
+
+    void send() {
+        // PACK send_vec
+        int pos(0);
+        for(auto & x: send_vec_) {
+            MPI_Pack(&x, 1, MPI_DOUBLE, send_buffer_, send_buffer_size_, &pos, MPI_COMM_WORLD);
+            assert(pos <= send_buffer_size_);
+        }
+            MPI_Isend(send_buffer_, send_buffer_size_, MPI_PACKED, receiver_, tag_, MPI_COMM_WORLD, &w_.r[0]);
+            MPI_Irecv(rec_buffer_, rec_buffer_size_, MPI_PACKED, receiver_, tag_, MPI_COMM_WORLD, &w_.r[1]);
+    }
+
+    void fetch() {
+        // UNPACK
+        w_.wait();
+        int pos(0);
+        for(auto & x: rec_vec_) {
+            MPI_Unpack(rec_buffer_, rec_buffer_size_, &pos, &x, 1, MPI_DOUBLE, MPI_COMM_WORLD);
+            assert(pos <= rec_buffer_size_);
+        }
+    }
+
+private:
+    std::vector<val_t> & send_vec_;
+    std::vector<val_t> & rec_vec_;
+    int receiver_;
+    int tag_;
+    Wait w_;
+    int send_buffer_size_;
+    int rec_buffer_size_;
+    char* send_buffer_;
+    char* rec_buffer_;
+};
+
 
 #endif //__MPI_HELPERS_HEADER
