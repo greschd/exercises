@@ -12,7 +12,8 @@
 
 typedef int count_t;
 typedef double val_t;
-typedef std::vector<val_t> density_t;
+typedef std::vector<val_t> row_t;
+typedef std::vector<row_t> density_t;
 
 template<typename T>
 class Accumulator {
@@ -46,42 +47,46 @@ private:
 
 class DiffusionMPI {
 public:
-    DiffusionMPI(   count_t const & N, 
+    DiffusionMPI(   density_t const & rho,
                     val_t const & tau,
-                    val_t const & D
-                    ):   N_(N), 
-                        Ntot_(N*N), 
-                        rho_(density_t(Ntot_)), 
-                        rho2_(density_t(Ntot_)),
-                        delta_(2. / (N - 1)),
+                    val_t const & D,
+                    count_t const & rank,
+                    count_t const & size
+                    ):
+                        M_(),
+                        N_(rho[0].size()), 
+                        rho_(),
+                        rho2_(),
+                        delta_(2. / (rho.size() - 1)),
                         f1_(tau * D / (delta_ * delta_)),
                         f2_(1. - 4. * f1_),
                         n_(),
                         u_sq_(){
+        // get upper / lower bounds
+        count_t full_M = rho.size();
+        count_t lower = (rank * full_M) / size;
+        count_t upper = ((rank + 1) * full_M) / size;
+        // size will be + 2 for ghost rows
+        M_ = (upper - lower) + 2;
+        
         // initialize rho
-        for(count_t i = 0; i < N_; ++i) {
-            for(count_t j = 0; j < N_; ++j) {
-                if((fabs(delta_*i - 1.) < 0.5) && (fabs(delta_*j - 1.) < 0.5)) {
-                    rho_[i*N_ + j] = 1;
-                }
-            }
+        rho_.push_back(lower == 0 ? rho[full_M - 1] : rho[lower - 1]);
+        for(count_t i = lower; i < upper; ++i) {
+            rho_.push_back(rho[i]);
         }
+        rho_.push_back(upper == full_M ? rho[0] : rho[upper]);
     }
     
-    void iterate(count_t num_steps) {
-        for(count_t n = 0; n < num_steps; ++n) {
-            for(count_t i = 0; i < N_; ++i) {
-                for(count_t j = 0; j < N_; ++j) {
-                    rho2_[i*N_ + j] = f2_ * rho_[i*N_ + j] +
-                    f1_ * ( (j == N_-1 ? 0. : rho_[i*N_ + (j+1)]) +
-                            (j == 0    ? 0. : rho_[i*N_ + (j-1)]) +
-                            (i == N_-1 ? 0. : rho_[(i+1)*N_ + j]) +
-                            (i == 0    ? 0. : rho_[(i-1)*N_ + j]));
-                }
+    void iterate() {
+        for(count_t i = 1; i < M_ - 1; ++i) {
+            for(count_t j = 0; j < N_; ++j) {
+                rho2_[i][j] = f2_ * rho_[i][j] +
+                f1_ * ( (j == N_ - 1 ? 0. : rho_[i][j + 1]) +
+                        (j == 0 ? 0. : rho_[i][j - 1]) +
+                        rho_[i + 1][j]) + rho_[i - 1][j]));
             }
-            std::swap(rho2_, rho_);
-            
         }
+        std::swap(rho2_, rho_);
     }
     
     void print() const{
@@ -119,7 +124,7 @@ public:
     
 private:
     // size of rho
-    count_t N_, Ntot_;
+    count_t M_, N_;
 
     density_t rho_;
     density_t rho2_;

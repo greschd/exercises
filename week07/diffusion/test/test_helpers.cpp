@@ -19,37 +19,25 @@ int main(int argc, char* argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD,&rank);
 
     // test broadcast
-    std::vector<double> a;
+    std::vector<double> a(5);
+    std::vector<double> b(5);
     if(rank== 0) {
         a = {1, 2, 3, 4, 5};
+        exchange(a, b, 1, 99);
     }
-
-    broadcast(a, rank == 0);
-    std::cout << "rank: " << rank << ", list: ";
+    else if(rank == 1) {
+        b = {5, 4, 3, 2, 1};
+        exchange(b, a, 0, 99);
+    }
+    
     for(auto x: a) {
         std::cout << x << ", ";
     }
-    std::cout <<  std::endl;
-
-    MPI_Barrier(MPI_COMM_WORLD);
-    std::cout << std::flush;
-    MPI_Barrier(MPI_COMM_WORLD);
-    //~ std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-    // test send
-    std::vector<double> b;
-    if(rank== 0) {
-        b = {6, 7, 8, 9, 10};
-    }
-
-    send(b, 0, 2, 99);
-    std::cout << "rank: " << rank << ", list: ";
+    std::cout << std::endl;
     for(auto x: b) {
         std::cout << x << ", ";
     }
-    std::cout <<  std::endl;
-
-    broadcast(b, rank == 0);
+    std::cout << std::endl;
     
     MPI_Finalize();
     return 0;
