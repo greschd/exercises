@@ -25,10 +25,12 @@ class Exchange {
 public:
     Exchange(   std::vector<val_t> & send_vec,
                 std::vector<val_t> & rec_vec,
+                int const & rank,
                 int const & receiver,
                 int const & tag):
                     send_vec_(send_vec),
                     rec_vec_(rec_vec),
+                    rank_(rank),
                     receiver_(receiver),
                     tag_(tag),
                     w_() {
@@ -40,25 +42,41 @@ public:
         send_buffer_ = new char[send_buffer_size_];
         rec_buffer_ = new char[rec_buffer_size_];
     };
+
+    Exchange(Exchange const & A):
+        send_vec_(A.send_vec_),
+        rec_vec_(A.rec_vec_),
+        rank_(A.rank_),
+        receiver_(A.receiver_),
+        tag_(A.tag_),
+        w_(),
+        send_buffer_size_(A.send_buffer_size_),
+        rec_buffer_size_(A.rec_buffer_size_) {
+            send_buffer_ = new char[send_buffer_size_];
+            rec_buffer_ = new char[rec_buffer_size_];   
+                };
     
     ~Exchange() {
         delete[] send_buffer_;
         delete[] rec_buffer_;
     }
 
-    void test() {
-        std::cout << "msg to receiver " << receiver_ << " with tag " << tag_ << std::endl;
-    }
-
     void send() {
         // PACK send_vec
+        w_ = Wait();
         int pos(0);
         for(auto & x: send_vec_) {
             MPI_Pack(&x, 1, MPI_DOUBLE, send_buffer_, send_buffer_size_, &pos, MPI_COMM_WORLD);
             assert(pos <= send_buffer_size_);
         }
+        if(rank_ % 2 == 0) {
             MPI_Isend(send_buffer_, send_buffer_size_, MPI_PACKED, receiver_, tag_, MPI_COMM_WORLD, &w_.r[0]);
             MPI_Irecv(rec_buffer_, rec_buffer_size_, MPI_PACKED, receiver_, tag_, MPI_COMM_WORLD, &w_.r[1]);
+        }
+        else {
+            MPI_Irecv(rec_buffer_, rec_buffer_size_, MPI_PACKED, receiver_, tag_, MPI_COMM_WORLD, &w_.r[1]);
+            MPI_Isend(send_buffer_, send_buffer_size_, MPI_PACKED, receiver_, tag_, MPI_COMM_WORLD, &w_.r[0]);
+        }
     }
 
     void fetch() {
@@ -69,13 +87,15 @@ public:
             MPI_Unpack(rec_buffer_, rec_buffer_size_, &pos, &x, 1, MPI_DOUBLE, MPI_COMM_WORLD);
             assert(pos <= rec_buffer_size_);
         }
+        MPI_Barrier(MPI_COMM_WORLD);
     }
 
 private:
     std::vector<val_t> & send_vec_;
     std::vector<val_t> & rec_vec_;
-    int receiver_;
-    int tag_;
+    const int rank_;
+    const int receiver_;
+    const int tag_;
     Wait w_;
     int send_buffer_size_;
     int rec_buffer_size_;

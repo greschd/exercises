@@ -65,9 +65,9 @@ public:
                         n_(),
                         //~ ,u_sq_()
                         rank_(rank),
-                        size_(size)
+                        size_(size),
+                        exchanges_()
                         {
-        std::cout << rank_ << " of " << size_ << std::endl;
         // get upper / lower bounds
         count_t full_M = rho.size();
         count_t lower = (rank_ * full_M) / size_;
@@ -89,12 +89,14 @@ public:
         if(rank_ > 0) {
             exchanges_.push_back(Exchange(  rho_[1],
                                             rho_[0],
+                                            rank_,
                                             rank_ - 1,
                                             rank_ - 1));
         }
         if(rank_ < size_ - 1) {
             exchanges_.push_back(Exchange(  rho_[M_ - 2],
                                             rho_[M_ - 1],
+                                            rank_,
                                             rank_ + 1,
                                             rank_));
         }
@@ -102,43 +104,38 @@ public:
     
     void iterate(count_t const & num_steps) {
         for(count_t n = 0; n < num_steps; ++n) {
-            std::cout << "rank " << rank_ << ", 1" << std::endl; // DEBUG    
 
             // start communication
             for(auto & e: exchanges_) {
-                e.test();
                 e.send();
             }
-            std::cout << "rank " << rank_ << ", 2" << std::endl; // DEBUG    
-
+            std::cout << "1" << std::endl; // DEBUG
             // inner cells
-            //~ for(count_t i = 2; i < M_ - 2; ++i) {
-                //~ for(count_t j = 0; j < N_; ++j) {
-                    //~ rho2_[i][j] = f2_ * rho_[i][j] +
-                        //~ f1_ * ( (j == N_ - 1 ? 0. : rho_[i][j + 1]) +
-                                //~ (j == 0 ? 0. : rho_[i][j - 1]) +
-                                //~ rho_[i + 1][j] + rho_[i - 1][j]);
-                //~ }
-            //~ }
-            std::cout << "rank " << rank_ << ", 3" << std::endl; // DEBUG    
-
+            for(count_t i = 2; i < M_ - 2; ++i) {
+                for(count_t j = 0; j < N_; ++j) {
+                    rho2_[i][j] = f2_ * rho_[i][j] +
+                        f1_ * ( (j == N_ - 1 ? 0. : rho_[i][j + 1]) +
+                                (j == 0 ? 0. : rho_[i][j - 1]) +
+                                rho_[i + 1][j] + rho_[i - 1][j]);
+                }
+            }
+            std::cout << "2" << std::endl; // DEBUG
             // wait for communication to finish
             for(auto & e: exchanges_) {
                 e.fetch();
             }
-            std::cout << "rank " << rank_ << ", 4" << std::endl; // DEBUG    
-            
+            std::cout << "3" << std::endl; // DEBUG
             // boundary cells
-            //~ for(count_t j = 0; j < N_; ++j) {
-                //~ rho2_[1][j] = f2_ * rho_[1][j] +
-                    //~ f1_ * ( (j == N_ - 1 ? 0. : rho_[1][j + 1]) +
-                            //~ (j == 0 ? 0. : rho_[1][j - 1]) +
-                            //~ rho_[2][j] + rho_[0][j]);
-                //~ rho2_[M_ - 1][j] = f2_ * rho_[M_ - 1][j] +
-                    //~ f1_ * ( (j == N_ - 1 ? 0. : rho_[M_ - 1][j + 1]) +
-                            //~ (j == 0 ? 0. : rho_[M_ - 1][j - 1]) +
-                            //~ rho_[M_][j] + rho_[M_ - 2][j]);
-            //~ }
+            for(count_t j = 0; j < N_; ++j) {
+                rho2_[1][j] = f2_ * rho_[1][j] +
+                    f1_ * ( (j == N_ - 1 ? 0. : rho_[1][j + 1]) +
+                            (j == 0 ? 0. : rho_[1][j - 1]) +
+                            rho_[2][j] + rho_[0][j]);
+                rho2_[M_ - 1][j] = f2_ * rho_[M_ - 1][j] +
+                    f1_ * ( (j == N_ - 1 ? 0. : rho_[M_ - 1][j + 1]) +
+                            (j == 0 ? 0. : rho_[M_ - 1][j - 1]) +
+                            rho_[M_][j] + rho_[M_ - 2][j]);
+            }
             std::swap(rho2_, rho_);
         }
     }
@@ -165,14 +162,14 @@ public:
     void measure() {
         val_t res_n(0);
         //~ val_t res_u_sq(0);
-        //~ for(count_t i = 1; i < M_ - 1; ++i) {
-            //~ for(count_t j = 0; j < N_; ++j) {
-                //~ res_n += rho_[i][j];
+        for(count_t i = 1; i < M_ - 1; ++i) {
+            for(count_t j = 0; j < N_; ++j) {
+                res_n += rho_[i][j];
                 //~ res_u_sq +=  rho_[i*N_ + j] * 
                              //~ ((i * delta_ - 1.) * (i * delta_ - 1.) +
                              //~ (j * delta_ - 1.) * (j * delta_ - 1.)); 
-            //~ }
-        //~ }
+            }
+        }
         n_ << res_n;
         //~ u_sq_ << res_u_sq;
     }
@@ -205,6 +202,7 @@ private:
     const int rank_, size_;
 
     std::vector<Exchange> exchanges_;
+
 };
 
 #endif //__DIFFUSION_MPI_HEADER
