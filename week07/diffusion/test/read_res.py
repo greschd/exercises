@@ -20,13 +20,14 @@ def read(name, savename):
             data[i][j] = list(filter(None, data[i][j].split(" ")))
             for k in range(len(data[i][j])):
                 data[i][j][k] = float(data[i][j][k])
+
     
     for i, matrix in enumerate(data):
         plt.imshow(matrix, extent = [-1, 1, -1, 1])
         plt.colorbar()
         plt.savefig(savename + "_" + str(i))
         plt.close()
-        
+
     fig, axes = plt.subplots(2, 2)
     for i, ax in enumerate(axes.flat):
         im = ax.imshow(data[i], vmin = 0, vmax = 0.1, extent = [-1, 1, -1, 1])

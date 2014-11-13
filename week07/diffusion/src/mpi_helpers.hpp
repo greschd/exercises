@@ -55,7 +55,7 @@ public:
             send_buffer_ = new char[send_buffer_size_];
             rec_buffer_ = new char[rec_buffer_size_];   
                 };
-    
+
     ~Exchange() {
         delete[] send_buffer_;
         delete[] rec_buffer_;
@@ -87,7 +87,6 @@ public:
             MPI_Unpack(rec_buffer_, rec_buffer_size_, &pos, &x, 1, MPI_DOUBLE, MPI_COMM_WORLD);
             assert(pos <= rec_buffer_size_);
         }
-        MPI_Barrier(MPI_COMM_WORLD);
     }
 
 private:

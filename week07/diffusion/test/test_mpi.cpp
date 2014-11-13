@@ -31,22 +31,17 @@ int main(int argc, char* argv[]) {
             }
         }
     }
-    std::cout << "1" << std::endl; // DEBUG
     DiffusionMPI system(rho, tau, D, rank, size);
-    std::cout << "2" << std::endl; // DEBUG
     count_t num_steps(0.5 / tau);
-    //~ std::cout << "rank " << rank << ",2" << std::endl; // DEBUG
-    std::cout << "3" << std::endl; // DEBUG
+    //~ count_t num_steps(100);
     system.print();
-    std::cout << "4" << std::endl; // DEBUG
     system.iterate(num_steps);
-    //~ std::cout << "5" << std::endl; // DEBUG
-    //~ system.print();
-    //~ system.iterate(num_steps);    
-    //~ system.print();
-    //~ system.iterate(num_steps);    
-    //~ system.iterate(num_steps);    
-    //~ system.print();
+    system.print();
+    system.iterate(num_steps);    
+    system.print();
+    system.iterate(num_steps);    
+    system.iterate(num_steps);    
+    system.print();
 
     MPI_Finalize();
     

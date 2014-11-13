@@ -74,7 +74,6 @@ public:
         count_t upper = ((rank_ + 1) * full_M) / size_;
         // size will be + 2 for ghost rows
         M_ = (upper - lower) + 2;
-
         // initialize rho
         rho_.push_back(lower == 0 ? row_t(N_, 0) : row_t(rho[lower - 1]));
         for(count_t i = lower; i < upper; ++i) {
@@ -86,30 +85,48 @@ public:
             rho2_.push_back(x);
         }
         // create exchanges
+        // 2 different versions are needed because the references get
+        // swapped in std::swap
+        std::vector<Exchange> rho_exchange;
         if(rank_ > 0) {
-            exchanges_.push_back(Exchange(  rho_[1],
+            rho_exchange.push_back(Exchange(rho_[1],
                                             rho_[0],
                                             rank_,
                                             rank_ - 1,
                                             rank_ - 1));
         }
         if(rank_ < size_ - 1) {
-            exchanges_.push_back(Exchange(  rho_[M_ - 2],
+            rho_exchange.push_back(Exchange(rho_[M_ - 2],
                                             rho_[M_ - 1],
                                             rank_,
                                             rank_ + 1,
                                             rank_));
         }
+        std::vector<Exchange> rho2_exchange;
+        if(rank_ > 0) {
+            rho2_exchange.push_back(Exchange(  rho2_[1],
+                                            rho2_[0],
+                                            rank_,
+                                            rank_ - 1,
+                                            rank_ - 1));
+        }
+        if(rank_ < size_ - 1) {
+            rho2_exchange.push_back(Exchange(  rho2_[M_ - 2],
+                                            rho2_[M_ - 1],
+                                            rank_,
+                                            rank_ + 1,
+                                            rank_));
+        }
+        exchanges_.push_back(rho_exchange);
+        exchanges_.push_back(rho2_exchange);
     }
     
     void iterate(count_t const & num_steps) {
         for(count_t n = 0; n < num_steps; ++n) {
-
             // start communication
-            for(auto & e: exchanges_) {
+            for(auto & e: exchanges_[n % 2]) {
                 e.send();
             }
-            std::cout << "1" << std::endl; // DEBUG
             // inner cells
             for(count_t i = 2; i < M_ - 2; ++i) {
                 for(count_t j = 0; j < N_; ++j) {
@@ -119,43 +136,44 @@ public:
                                 rho_[i + 1][j] + rho_[i - 1][j]);
                 }
             }
-            std::cout << "2" << std::endl; // DEBUG
             // wait for communication to finish
-            for(auto & e: exchanges_) {
+            for(auto & e: exchanges_[n % 2]) {
                 e.fetch();
             }
-            std::cout << "3" << std::endl; // DEBUG
             // boundary cells
             for(count_t j = 0; j < N_; ++j) {
                 rho2_[1][j] = f2_ * rho_[1][j] +
                     f1_ * ( (j == N_ - 1 ? 0. : rho_[1][j + 1]) +
                             (j == 0 ? 0. : rho_[1][j - 1]) +
                             rho_[2][j] + rho_[0][j]);
-                rho2_[M_ - 1][j] = f2_ * rho_[M_ - 1][j] +
-                    f1_ * ( (j == N_ - 1 ? 0. : rho_[M_ - 1][j + 1]) +
-                            (j == 0 ? 0. : rho_[M_ - 1][j - 1]) +
-                            rho_[M_][j] + rho_[M_ - 2][j]);
+                rho2_[M_ - 2][j] = f2_ * rho_[M_ - 2][j] +
+                    f1_ * ( (j == N_ - 1 ? 0. : rho_[M_ - 2][j + 1]) +
+                            (j == 0 ? 0. : rho_[M_ - 2][j - 1]) +
+                            rho_[M_ - 1][j] + rho_[M_ - 3][j]);
             }
             std::swap(rho2_, rho_);
         }
     }
     
     void print() const{
-        int curr_rank(0);
-        while (curr_rank < size_) {
+        for(int curr_rank = 0; curr_rank < size_; ++curr_rank) {
             if (rank_ == curr_rank) {
                 for(count_t i = 1; i < M_ - 1; ++i) {
                     for(count_t j = 0; j < N_; ++j) {
+                //~ for(count_t i = 0; i < M_ ; ++i) {
+                    //~ for(count_t j = 0; j < N_; ++j) {
                         std::cout << rho_[i][j] << " ";
+                        std::cout.flush();
                     }
                 std::cout << "\\";
+                std::cout.flush();
                 }
                 if(curr_rank == size_ - 1) {
                     std::cout << "end";
+                    std::cout.flush();
                 }
             }
-            ++curr_rank;
-            MPI_Barrier (MPI_COMM_WORLD);
+            MPI_Barrier(MPI_COMM_WORLD);
         }
     }
     
@@ -165,6 +183,8 @@ public:
         for(count_t i = 1; i < M_ - 1; ++i) {
             for(count_t j = 0; j < N_; ++j) {
                 res_n += rho_[i][j];
+                /// this part would have to be adjusted for being in
+                /// a domain that's not a square around zero.
                 //~ res_u_sq +=  rho_[i*N_ + j] * 
                              //~ ((i * delta_ - 1.) * (i * delta_ - 1.) +
                              //~ (j * delta_ - 1.) * (j * delta_ - 1.)); 
@@ -201,7 +221,7 @@ private:
 
     const int rank_, size_;
 
-    std::vector<Exchange> exchanges_;
+    std::vector<std::vector<Exchange>> exchanges_;
 
 };
 
