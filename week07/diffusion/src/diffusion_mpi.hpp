@@ -37,7 +37,7 @@ public:
         return square_ / double(N_);
     }
 
-    auto res() const {
+    std::pair<res_t, res_t> res() const {
         return std::pair<res_t, res_t>(avg(), square());
     }
     
@@ -63,7 +63,6 @@ public:
                         f1_(tau * D / (delta_ * delta_)),
                         f2_(1. - 4. * f1_),
                         n_(),
-                        //~ ,u_sq_()
                         rank_(rank),
                         size_(size),
                         exchanges_()
@@ -87,6 +86,7 @@ public:
         // create exchanges
         // 2 different versions are needed because the references get
         // swapped in std::swap
+        // something could be done about having the buffers twice
         std::vector<Exchange> rho_exchange;
         if(rank_ > 0) {
             rho_exchange.push_back(Exchange(rho_[1],
@@ -160,8 +160,6 @@ public:
             if (rank_ == curr_rank) {
                 for(count_t i = 1; i < M_ - 1; ++i) {
                     for(count_t j = 0; j < N_; ++j) {
-                //~ for(count_t i = 0; i < M_ ; ++i) {
-                    //~ for(count_t j = 0; j < N_; ++j) {
                         std::cout << rho_[i][j] << " ";
                         std::cout.flush();
                     }
@@ -194,7 +192,7 @@ public:
         //~ u_sq_ << res_u_sq;
     }
 
-    auto n() const {
+    std::pair<val_t, val_t> n() const {
         return n_.res();
     }
     

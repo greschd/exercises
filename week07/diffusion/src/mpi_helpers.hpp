@@ -17,10 +17,13 @@ struct Wait {
         MPI_Waitall(2, r, s);
     }
 
+    void wait_recv() {
+        MPI_Wait(&r[1], &s[1]);
+    }
+
     MPI_Request r[2];
     MPI_Status s[2];
 };
-
 class Exchange {
 public:
     Exchange(   std::vector<val_t> & send_vec,
@@ -81,7 +84,7 @@ public:
 
     void fetch() {
         // UNPACK
-        w_.wait();
+        w_.wait_recv();
         int pos(0);
         for(auto & x: rec_vec_) {
             MPI_Unpack(rec_buffer_, rec_buffer_size_, &pos, &x, 1, MPI_DOUBLE, MPI_COMM_WORLD);

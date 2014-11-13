@@ -1,0 +1,17 @@
+mpiexec -np 1 ./a.out 1 > t_1.txt;
+mpiexec -np 2 ./a.out 1 > t_2.txt;
+mpiexec -np 4 ./a.out 1 > t_4.txt;
+mpiexec -np 6 ./a.out 1 > t_6.txt;
+mpiexec -np 8 ./a.out 1 > t_8.txt;
+mpiexec -np 10 ./a.out 1 > t_10.txt;
+mpiexec -np 12 ./a.out 1 > t_12.txt;
+mpiexec -np 14 ./a.out 1 > t_14.txt;
+mpiexec -np 16 ./a.out 1 > t_16.txt;
+mpiexec -np 20 ./a.out 1 > t_20.txt;
+mpiexec -np 24 ./a.out 1 > t_24.txt;
+mpiexec -np 28 ./a.out 1 > t_28.txt;
+mpiexec -np 32 ./a.out 1 > t_32.txt;
+mpiexec -np 36 ./a.out 1 > t_36.txt;
+mpiexec -np 40 ./a.out 1 > t_40.txt;
+mpiexec -np 44 ./a.out 1 > t_44.txt;
+mpiexec -np 48 ./a.out 1 > t_48.txt;
