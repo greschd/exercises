@@ -48,8 +48,8 @@ def plot_strong():
     ax.set_xlim(0.5, 48.5)
     ax.set_xlabel('\# cores')
     ax.set_ylabel('inverse runtime', rotation = "horizontal", horizontalalignment = "left")
-    ax.yaxis.set_label_coords(0, 1.04)
-    ax.text(0.5, 1.08, '$N = 10080$, $\delta t = 0.01$, 50 steps',
+    ax.yaxis.set_label_coords(0, 1.02)
+    ax.text(0.5, 1.1, 'Strong scaling: $N = 10080$, $\delta t = 0.01$, 50 steps',
          horizontalalignment='center',
          fontsize=20,
          transform=ax.transAxes)
@@ -58,22 +58,30 @@ def plot_strong():
 def plot_weak():
     x = [m['nproc'] for m in weak]
     y = [1 / m['time'] for m in weak]
+    yvar = [m['time'] for m in weak]
     fig, ax = plt.subplots()
 
-    #~ xopt = np.linspace(0, 50, 100)
-    #~ yopt = serial * xopt
     ax.plot(x, y, 'o', label='measured')
-    #~ ax.plot(xopt, yopt, label='linear scaling')
-    #~ ax.set_xlim(0.5, 48.5)
     ax.set_xlabel('\# cores')
     ax.set_ylabel('inverse runtime', rotation = "horizontal", horizontalalignment = "left")
-    ax.yaxis.set_label_coords(0, 1.04)
-    ax.text(0.5, 1.08, '$N = 10080$, $\delta t = 0.01$, 50 steps',
+    ax.yaxis.set_label_coords(0, 1.02)
+    ax.text(0.5, 1.1, 'Weak scaling: $N = 2520$ (per core), $\delta t = 0.01$, 5 steps',
          horizontalalignment='center',
          fontsize=20,
          transform=ax.transAxes)
     plt.savefig('../../pdf/plots/weak.pdf', bbox_inches='tight')
-    plt.show()
+    fig.clf()
+
+    fig, ax = plt.subplots()
+    ax.plot(x, yvar, 'o', label='measured')
+    ax.set_xlabel('\# cores')
+    ax.set_ylabel('runtime', rotation = "horizontal", horizontalalignment = "left")
+    ax.yaxis.set_label_coords(0, 1.02)
+    ax.text(0.5, 1.1, 'Weak scaling: $N = 2520$ (per core), $\delta t = 0.01$, 5 steps',
+         horizontalalignment='center',
+         fontsize=20,
+         transform=ax.transAxes)
+    plt.savefig('../../pdf/plots/weak_runtime.pdf', bbox_inches='tight')
     fig.clf()
 
 
