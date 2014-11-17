@@ -1,1 +1,1 @@
-nproc: 6, N: 10080, dt: 0.01, steps: 50, time: 14.9217
+nproc: 6, N: 10080, dt: 0.01, steps: 50, time: 14.5771

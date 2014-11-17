@@ -1,1 +1,1 @@
-nproc: 8, N: 1260, dt: 0.01, steps: 50, time: 0.151213
+nproc: 8, N: 1260, dt: 0.01, steps: 50, time: 0.151161

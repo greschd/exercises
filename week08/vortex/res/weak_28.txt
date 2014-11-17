@@ -1,1 +1,1 @@
-4 total processes failed to start
+nproc: 28, N: 360, dt: 0.01, steps: 50, time: 0.0266874

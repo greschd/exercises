@@ -1,1 +1,1 @@
-8 total processes failed to start
+nproc: 32, N: 315, dt: 0.01, steps: 50, time: 0.127532
