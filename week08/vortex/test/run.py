@@ -18,5 +18,5 @@ with open("run.sh", "w") as f:
     for i in nproc:
         f.write("mpirun -n " + str(i) + " ./a.out 10080 50 > ../res/strong_" + str(i) + ".txt;\n")
     for i in nproc:
-        f.write("mpirun -n " + str(i) + " ./a.out + " + str(n / i) + " 50 > ./res/weak_" + str(i) + ".txt;\n")
+        f.write("mpirun -n " + str(i) + " ./a.out " + str(n / i) + " 50 > ./res/weak_" + str(i) + ".txt;\n")
 
