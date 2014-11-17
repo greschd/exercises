@@ -5,10 +5,12 @@
 # Date:    17.11.2014 12:50:08 CET
 # File:    read_res.py
 
+import sys
 import matplotlib.pyplot as plt
 import subprocess
 
-with open('res.txt', 'r') as f:
+num = str(sys.argv[1])
+with open('res_' + num + '.txt', 'r') as f:
     data = f.read()
 
 data = filter(None, data.split('x, y, gamma'))
@@ -26,7 +28,7 @@ for i in range(len(data)):
     ax.plot(x, y, 'bo', markersize=0.2)
     ax.set_xlim(-size, size)
     ax.set_ylim(-size, size)
-    plt.savefig('../plots/plot_' + str(i).rjust(3, '0') + '.png', dpi=900)
+    plt.savefig('../plots/plot_' + num + '_' + str(i).rjust(3, '0') + '.png', dpi=900)
     ax.cla()
 
-subprocess.call('avconv -r ' + str(int(len(data) / 2)) + ' -i ../plots/plot_%03d.png ../plots/vortices.mp4', shell=True)
+subprocess.call('avconv -r ' + str(int(len(data) / 2)) + ' -i ../plots/plot_' + num + '_%03d.png ../plots/vortices' + num + '.mp4', shell=True)

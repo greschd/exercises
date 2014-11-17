@@ -20,7 +20,8 @@ public:
         val_t h = 1 / val_t(N);
         val_t x = -0.5 + (0.5 * h);
         for(auto & p: particles_) {
-            p.pos = x;
+            p.x = x;
+            p.y = 0;
             p.gamma = h * gamma_fct(x);
             x += h;
         }
@@ -32,19 +33,19 @@ public:
     void print() const {
         std::cout << "x, y, gamma" << std::endl;
         for(auto p: particles_) {
-            std::cout << p.pos.real() << ", " << p.pos.imag() << ", " << p.gamma << std::endl;
+            std::cout << p.x << ", " << p.y << ", " << p.gamma << std::endl;
         }
     }
 
     void iterate(count_t const & steps, val_t const & dt) {
         for(count_t i = 0; i < steps; ++i) {
-            for(count_t i = 0; i < particles_.size(); ++i) {
+            for(count_t j = 0; j < particles_.size(); ++j) {
                 complex_t sum(0);
                 for(auto & q: particles_) {
-                    if(&particles_[i] != &q) {
-                        sum += q.gamma / (particles_[i].pos - q.pos);
+                    if(&particles_[j] != &q) {
+                        sum += q.gamma / (particles_[j].pos() - q.pos());
                     }
-                    particles2_[i].pos = particles_[i].pos - (complex_t(0, dt)/(2 * pi)) * sum;
+                    particles2_[j].pos(particles_[j].pos() - (complex_t(0, dt)/(2 * pi)) * sum);
                 }
             }
             std::swap(particles_, particles2_);
