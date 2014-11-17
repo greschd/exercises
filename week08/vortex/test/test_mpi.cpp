@@ -23,10 +23,8 @@ int main(int argc, char* argv[]) {
 
     VortexSheet_MPI test(10000, gamma, rank, size);
     test.print();
-    //~ test.iterate(1, 0.01);
     for(uint i = 0; i < 20; ++i) {
         test.iterate(10, 0.01);
-        //~ std::cout << "finished iterate nr. " << i << std::endl;
         test.print();
     }
 

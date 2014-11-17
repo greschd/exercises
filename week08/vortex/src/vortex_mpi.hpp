@@ -86,9 +86,6 @@ public:
             for(count_t k = 0; k < M_; ++k) {
                 particles_[k].pos(particles_[k].pos() - (complex_t(0, dt)/(2 * pi)) * sum_[k]);
             }
-            //~ if(rank_ == 0) {
-                //~ std::cout << "finished " << i << " on rank " << rank_ << std::endl;
-            //~ }
         }
     }
 
