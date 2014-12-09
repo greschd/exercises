@@ -10,9 +10,7 @@
 
 
 val_t gamma(val_t x) {
-    val_t y = x / 0.5;
-    y *= y;
-    return 4. * x / (std::sqrt(1 - y));
+    return x*x;
 }
 
 int main(int argc, char* argv[]) {

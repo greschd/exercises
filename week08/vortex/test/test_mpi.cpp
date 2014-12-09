@@ -6,12 +6,14 @@
 #include "../src/vortex_mpi.hpp"
 
 #include <iostream>
+#include <cassert>
 
 
 val_t gamma(val_t x) {
     val_t y = x / 0.5;
     y *= y;
-    return x / (2 * std::sqrt(1 - y));
+    //~ assert(std::abs(y) < 1);
+    return 4. * x / (std::sqrt(1 - y));
 }
 
 int main(int argc, char* argv[]) {
@@ -23,10 +25,10 @@ int main(int argc, char* argv[]) {
 
     VortexSheet_MPI test(10000, gamma, rank, size);
     test.print();
-    for(uint i = 0; i < 20; ++i) {
-        test.iterate(10, 0.01);
-        test.print();
-    }
+    //~ for(uint i = 0; i < 20; ++i) {
+        //~ test.iterate(10, 0.01);
+        //~ test.print();
+    //~ }
 
     MPI_Finalize();
 
