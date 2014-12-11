@@ -16,23 +16,25 @@ int main( int argc, char** argv )
     
     // SET UP COMMUNICATION.
     // DETERMINE num_processes AND OUR rank
-    ...
+    MPI_Init(&argc, &argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &num_processes);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     
     
     // initialize local parts of the vectors and do the sum z = x + y
     assert( N % num_processes == 0 );
     int nlocal = N / num_processes;
+    //~ std::cout << nlocal << " on rank " << rank << std::endl;
     std::vector<float> x(nlocal,-1.2), y(nlocal,3.4), z(nlocal);
     for( int i = 0; i < nlocal; i++ )
         z[i] = x[i] + y[i];
-    
+
     if( rank == 0 )
     {
         std::vector<float> fullz(N);
-        
-        
+
         // COLLECT ALL PARTS INTO fullz
-        ...
+        MPI_Gather(z.data(), nlocal, MPI_FLOAT, fullz.data(), nlocal, MPI_FLOAT, 0, MPI_COMM_WORLD);
         
         
         // print result checksum
@@ -41,9 +43,9 @@ int main( int argc, char** argv )
     else
     {
         // SEND LOCAL PART z TO ROOT PROCESS
-        ...
+        MPI_Gather(z.data(), nlocal, MPI_FLOAT, NULL, N, MPI_FLOAT, 0, MPI_COMM_WORLD);
     }
     
     // CLEAN UP
-    ...
+    MPI_Finalize();
 }

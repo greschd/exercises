@@ -17,7 +17,10 @@ int main( int argc, char** argv )
     
     
     // DO THE SUM z = x + y
-    ...
+    #pragma omp parallel for
+    for(int i = 0; i < N; ++i) {
+        z[i] = x[i] + y[i];
+    }
     
     
     // print result checksum

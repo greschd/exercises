@@ -1,6 +1,6 @@
 CXX=g++
 MPICXX=mpic++
-CXXFLAGS=-Wall -std=c++11 -lpthread
+CXXFLAGS=-Wall -std=c++11 -pthread -Wl,--no-as-needed
 
 all: omp threads mpi
 
