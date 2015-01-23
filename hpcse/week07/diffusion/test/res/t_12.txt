@@ -1,0 +1,4 @@
+mesh: 128, steps: 61035, tau: 1e-05, D: 1, time: 1.46588
+mesh: 256, steps: 15258, tau: 1e-06, D: 1, time: 0.826868
+mesh: 1024, steps: 953, tau: 1e-08, D: 1, time: 0.417857
+mesh: 2048, steps: 238, tau: 1e-08, D: 1, time: 0.561688
