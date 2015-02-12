@@ -1,0 +1,29 @@
+Fastcode - HW01
+
+################### E1 #####################
+Points: 23
+---------------- Comments ---------------
+
+both in b) and c) you are using a wrong notation.
+A cost is equal to a function or belongs to a set.
+So you can say C(N) = N^3/6 + O(N^2) or C(N) \in O(N^3)
+but not C(N) \in N^3/6 + O(N^2).
+
+################### E2-E4 ##################
+Points:15+15+20
+---------------- Comments ---------------
+
+We provide few remarks of common interest to many:
+- In general, baseline code should be already optimized using flags -O2/3.
+- All performance plots should have y-axis starting from 0 flops/cycle.
+- When benchmarking make sure your measurements are not affected by freq. scaling
+  (e.g., Intel SpeedStep and Turbo Boost tech.).
+- In order to avoid outliers, run every test case multiple times and use a proper average.
+
+################### E5 #####################
+Points:5+5+5+0
+(c) ii. You should actually divide with the tp. Further more tp_RAM = 1.
+---------------- Comments ---------------
+################ Neatness ##################
+Points: 5
+---------------- Comments ---------------

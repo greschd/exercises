@@ -1,0 +1,22 @@
+Fastcode - HW02
+
+################### E1 #####################
+Points: 10
+---------------- Comments ---------------
+
+################### E2 #####################
+Points: 25
+---------------- Comments ---------------
+There is no need to repeat the experiments as the measurement code already does that.
+Task f) Isn't there a better way to compute x^k rather than x*x*x*x*x*x*x*x?
+################### E3 #####################
+Points: 40
+---------------- Comments ---------------
+
+################### E4 #####################
+Points: 20
+---------------- Comments ---------------
+
+################ Neatness ##################
+Points: 5
+---------------- Comments ---------------

@@ -1,0 +1,168 @@
+\documentclass[11pt]{article}
+\usepackage[pdftex]{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{float}										% positioning of floats such as graphics, tables
+\usepackage{subfig}
+\usepackage{amsmath}									% advanced math extensions
+\usepackage{latexsym}									% other mathematical symbols
+\usepackage{amssymb}									% other mathematical symbols
+\usepackage{amsthm}										% theorem environment
+\usepackage{commath}									% differential operators \dif
+\usepackage{mathrsfs}									% mathscr font in math mode																
+\usepackage{setspace}									% modifiable line pitch
+\usepackage{array}										% extends possibility of LaTeX to handle tables
+\usepackage{hyperref}									% best package wo je h�ts gits
+\usepackage{parskip}									% no indention for new paragraphs
+\usepackage{framed}										% framed environment for framed text
+\usepackage{fancyhdr} 									% change header and footer of any page of the document
+\usepackage{mdwlist}									% smaller line pitch for \itemize, \enumerate
+\usepackage{color}										% adds support for colored text
+\usepackage[english]{babel}
+
+\renewcommand{\labelitemi}{--}
+\newcommand{\unit}[1]{\ensuremath{\, \mathrm{#1}}}			% units
+
+\definecolor{darkblue}{rgb}{0,0,.4}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\hypersetup{pdfborder={0 0 0},colorlinks=true,linkcolor=darkblue,citecolor=darkgreen}
+
+
+\newcommand{\lint}{\mathlarger{\int}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\linspan}{\operatorname{span}}
+\newcommand{\nextpar}{\vspace{5pt}}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\usepackage[a4paper,left=2.5cm, right=2.5 cm, top=2.5cm, bottom=2cm]{geometry}
+
+\usepackage{pdfpages}
+\usepackage{pict2e}
+
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{} 
+\fancyhead[L]{\sffamily  {\small FastCode}}
+\fancyhead[R]{\sffamily  {\small Homework 2}}
+
+
+\begin{document}
+\hspace{0.2 in}
+\begin{center}
+	\begin{Large}
+		\textbf{Homework 2: Solutions Dominik Gresch}
+	\end{Large}
+\end{center}
+
+\subsection*{Exercise 2: Polynomials Evaluation}
+		The $\mathtt{poly.c}$ file can be found in $\mathtt{ex02/poly/}$
+	\begin{itemize}
+		\item[a)] op count for poly: 
+			\begin{align*}
+				&\sum\limits_{i=0}^N 1 = N + 1 & \text{adds}\\
+				&\sum\limits_{i=0}^N\sum\limits_{j=0}^{i - 1} 1 = \frac{1}{2}~(N^2 + N) & \text{mults}\\
+				\Rightarrow ~& \underline{\underline{\frac{1}{2}~N^2 + \frac{3}{2}~N + 1}} \in \mathcal{O}(N^2) & \text{flop}
+			\end{align*}
+		\item[b)] Results of the measurement: 
+		\begin{table}[H]
+		\begin{tabular}  {l||l|l|l|l|l}
+			size $N$ & 128 & 256 & 512 & 1024 & 2048\\\hline
+			performance [flop/cycle] & .197$\pm$.003 & .198$\pm$.007 & .148$\pm$.004 & .111$\pm$.002 & .128$\pm$.002\\\hline
+			op count & 8385 & 33153 & 131841 & 525825 & 2100225\\\hline
+			runtime [kcycles] & 42.6$\pm$.6 & 167$\pm$6 & 890$\pm$30 & 4750$\pm$90 & 16400$\pm$300\\
+			
+		\end{tabular}
+		\caption{results using $\mathtt{poly()}$}
+		\end{table}
+		\begin{tabbing}
+			System: ~~~~\=  Intel Core 2 Duo @ 3.06 GHz on Ubuntu 13.10 \\
+			Compiler: \> gcc v.4.8.1\\
+			Flags:  \>-O3 -fno-tree-vectorize -mno-abm
+		\end{tabbing}
+
+		\item[c)] The op count for the $\mathtt{horner()}$ function is 
+		\[N \unit{add} + N \unit{mult} \Rightarrow 2N \unit{flop} \] 
+		\item[d)] Since, in the implementation of the Horner algorithm, the operands for each computation depend on the result of the previous computation, performance will be determined by the latency of those flops. \\ On my system (Intel Core 2 Duo), the add has a latency of 3 and the mult has a latency of 5. Hence I would expect the runtime to be $8N \unit{cycles}$ (one add and one mult per loop iteration). \[ \Rightarrow \text{performance} =  \frac{2N}{8N} = 0.25 \unit{flop/cycle} \]
+		\item[e)] using the same system, compiler and flags as in a). The results correspond nicely to the value expected in d).
+		\begin{table}[H]
+			\begin{tabular}  {l||l|l|l|l|l}
+				size $N$ & 128 & 256 & 512 & 1024 & 2048\\\hline
+				performance [flop/cycle] & .251$\pm$.002 & .252$\pm$.005 & .253$\pm$.003 & .252$\pm$.003 & .252$\pm$.005\\\hline
+				op count & 256 & 512 & 1024 & 2048 & 4096\\\hline
+				runtime [kcycles] & 1.02$\pm$.01 & 2.04$\pm$.04 & 4.05$\pm$.05 & 8.1$\pm$.1 & 16.2$\pm$.3\\
+				
+			\end{tabular}
+			\caption{results using $\mathtt{horner()}$}
+		\end{table}
+		\item[f)] The $\mathtt{horner()}$ function shows both better performance and better runtime. Whilst the performance is only slightly better ($\sim 1 - 2 ~x$), the lower op count (and especially the better scaling) makes $\mathtt{horner()}$ perform much better (up to $1000 ~ x$ for larger $N$) in terms of runtime. 
+		\item[g)] Remark: The $\mathcal{O}(1)$ overhead has not been taken into account for the cost calculation. Measured on the same system as in b).
+		\begin{table}[H]
+		\begin{tabular}  {l||l|l|l|l|l}
+			size $N$ & 128 & 256 & 512 & 1024 & 2048\\\hline
+			performance [flop/cycle] & 1.38$\pm$.03 & 1.662$\pm$.009 & 1.822$\pm$.009 & 1.895$\pm$.009 & 1.93$\pm$.04\\\hline
+			op count & 256 & 512 & 1024 & 2048 & 4096\\\hline
+			runtime [kcycles] & .186$\pm$.004 & .308$\pm$.002 & .562$\pm$.003 & 1.081$\pm$.005 & 2.12$\pm$.04\\
+			
+		\end{tabular}
+		\caption{results using $\mathtt{horner2()}$}
+		\end{table}
+		The key performance limitation if $\mathtt{horner()}$ is the sequential dependece of the operands. Hence one can obtain great speedup by using accumulators (up to $\sim 4 ~x$ using 8 accumulators).
+	\end{itemize}
+\subsection*{Exercise 3: Optimization Blockers}
+	The $\mathtt{comp.c}$ file can be found in $\mathtt{ex03/superslow/}$
+	\begin{itemize}
+		\item[a)] The main performance blockers are:
+		\begin{itemize}
+			\item calling $\mathtt{f()}$ twice
+			\item overly complicated $\mathtt{sin(...)cos(...)}$ - expression can be replaced (strength reduction)
+			\item common subexpressions in $\mathtt{f()}$ (the same $\mathtt{sin()}$ appears twice)
+			\item in $\mathtt{sqrt(fabs(47 + ..))}$, $\mathtt{fabs()}$ is unnecessary because $47$ dominates the term (i.e. the right sign can be put manually).
+		\end{itemize}
+		less important:
+		\begin{itemize}
+			\item scalar replacement
+			\item getting rid of the $\mathtt{if()}$ (doesn't give much gain due to branch prediction)
+			\item making use of common subexpressions in indices
+		\end{itemize}
+		\item[c)] I don't see how one can get rid of the last $\mathtt{sin()}$. It might be possible to approximate it well enough via Taylor expansion, but this changes the result, which should not be the goal.
+	\item[e)]
+	\begin{table}[H]\centering
+		\begin{tabular}  {l||l|l}
+			function & perf [Mflops] with $-\mathtt{O0}$& perf [Mflops] with $-\mathtt{O3}$\\\hline\hline
+			$\mathtt{superslow()}$&$1.89~\pm~.06$ & $1.87~\pm~.07$\\\hline
+			$\mathtt{using\_fasterf()}$&$20.3~\pm~.5$ & $20.3~\pm~.5$\\\hline
+			$\mathtt{fast()}$&$22.5~\pm~.1$ & $22.5~\pm~.1$\\
+			
+		\end{tabular}
+		\caption{performance of different implementations of the $\mathtt{superslow()}$ function (averaged)}
+	\end{table}
+	I have made two new versions: one of them only removing what I called the main performance blockers ($\mathtt{using\_fasterf()}$) and one where I removed all the performance blockers I found ($\mathtt{fast()}$). Using all this, I get a speedup of about $12 ~x$. Surprisingly, the difference between $\mathtt{O0}$ and $\mathtt{O3}$ is negligible (even in the simpler versions).
+	\end{itemize}
+
+	\newpage
+\subsection*{Exercise 4: Locality of a Convolution}
+	\begin{itemize}
+		\item[a)] Temporal locality:\\
+		For each of the two triple - loops ($\mathtt{i - j- k}$), there is the following temporal locality:\\
+		\emph{Remark: in the ` $\pm$ ', ` $+$ ' stands for the first, ` $-$ ' for the second triple - loop}
+		\begin{itemize}
+			\item in the write to $\mathtt{B[i][j]}$ and the read from $\mathtt{A[i\pm1][j\pm2]}$ (happens for each $\mathtt{k}$ in the innermost loop).
+			\item if $\mathtt{K}$ is ``small enough'' (i.e. two iterations of the $\mathtt{j}$ - loop are ``soon enough'' after each other), there is temporal locality in the read from $\mathtt{H[K - k - 1]}$ (happens for every $\mathtt{j}$ in the middle loop). This would also occur between the two triple-loops.
+			\item in the $\mathtt{i}$ - and $\mathtt{j}$ - loop, there is temporal locality in $\mathtt{A}$ whenever $\mathtt{i\pm1 = i' \pm k'/K}$ and $\mathtt{j \pm 2 = j' \pm k'\%K}$ (or vice versa), for loop - variables $\mathtt{(i, j, k)}$ and $\mathtt{(i', j', k')}$ that happen ``soon enough'' after each other. (in particular for $\mathtt{i = i', j = j'}$).
+		\end{itemize}
+		One can safely assume that there is no temporal locality between the two triple - loops for $\mathtt{A}$ and $\mathtt{B}$ (i.e. the same($\mathtt{B}$)/similar($\mathtt{A}$) $\mathtt{(i, j)}$-values do not occur ``soon enough'')
+		
+		\item[b)]Spatial locality:\\
+		For each of the two triple - loops ($\mathtt{i - j- k}$), there is the following spatial locality:
+		\begin{itemize}
+		\item accessing neighbouring elements of $\mathtt{H}$ (in the innermost loop, and also across the two triple - loops)
+		\item in the $\mathtt{j}$ - loop, there is write($\mathtt{B[i][j]}$) and read $\mathtt{A[i \pm 1][j \pm 2]}$ to/from neighbouring elements (same first column, different row).
+		\item within the same $\mathtt{k/K}$, $\mathtt{A[i\pm k / K][j\pm k\%K]}$ accesses neighbouring elements of $\mathtt{A}$. (both within the $\mathtt{k}$ - and the $\mathtt{j}$ - loop).
+		\item in general, for two sets of loop variables $\mathtt{(i, j, k)}$ and $\mathtt{(i', j', k')}$ that happen ``soon enough'' after each other, there is locality in $\mathtt{A}$ if the distance \[ \mathtt{N \cdot (i - i' \pm 1 \mp k'/K) + j - j' \pm 2 \mp k'\%K} \]
+		(or vice versa) is ``near enough''. 
+		\end{itemize}
+	\end{itemize}
+\end{document}

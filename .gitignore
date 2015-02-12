@@ -2,3 +2,8 @@ build
 *~
 *.out
 *.so
+__pycache__
+*.pyc
+*.gz
+*.log
+*.aux

@@ -1,0 +1,19 @@
+Fastcode - HW05
+
+################### E1 #####################
+Points: 52
+---------------- Comments ---------------
+No scalar replacement used in code. (-5 points)
+No preload of elements of C. (-3 points)
+e) Incorrect computation, should be 60, 60, 56. (-5 points)
+################### E2 #####################
+Points: 10
+---------------- Comments ---------------
+No discussion of the plot provided. (-5 points)
+################### E3 #####################
+Points: 15
+---------------- Comments ---------------
+
+################ Neatness ##################
+Points: 5
+---------------- Comments ---------------

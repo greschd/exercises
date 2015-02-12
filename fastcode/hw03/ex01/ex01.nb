@@ -1,0 +1,460 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     15124,        451]
+NotebookOptionsPosition[     13812,        405]
+NotebookOutlinePosition[     14170,        421]
+CellTagsIndexPosition[     14127,        418]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["FastCode Hw03 Ex01", "Section",
+ CellChangeTimes->{{3.604033685242731*^9, 3.604033711293486*^9}}],
+
+Cell["\<\
+Heaviside - function with Theta[0] = 0\
+\>", "Text",
+ CellChangeTimes->{{3.6040336672132597`*^9, 3.604033681975151*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Theta", "[", "x_", "]"}], ":=", 
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"x", ">", "0"}], ",", "1", ",", "0"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.6040315973866243`*^9, 3.6040316106345263`*^9}, {
+  3.604031644957408*^9, 3.6040316521302*^9}, {3.6040317219118557`*^9, 
+  3.604031726711424*^9}}],
+
+Cell["block number of y", "Text",
+ CellChangeTimes->{{3.604033660156913*^9, 3.604033664988037*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[Alpha]", "[", 
+   RowBox[{"s_", ",", "b_", ",", "t_", ",", "i_"}], "]"}], ":=", 
+  RowBox[{"Mod", "[", 
+   RowBox[{
+    RowBox[{"Floor", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"b", "*", "s"}], " ", "+", " ", 
+        RowBox[{"Mod", "[", 
+         RowBox[{"i", ",", 
+          RowBox[{
+           RowBox[{"b", "*", "s"}], "+", "t"}]}], "]"}]}], ")"}], "/", "b"}], 
+     "]"}], ",", 
+    RowBox[{"2", "*", "s"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.604015126721044*^9, 3.6040151351734858`*^9}, {
+  3.604015207846246*^9, 3.604015240205579*^9}, {3.604015277126507*^9, 
+  3.6040152813179083`*^9}}],
+
+Cell["block number of x", "Text",
+ CellChangeTimes->{{3.604033650549108*^9, 3.604033657821989*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[Beta]", "[", 
+   RowBox[{"s_", ",", "b_", ",", "t_", ",", "i_"}], "]"}], ":=", 
+  RowBox[{"Mod", "[", 
+   RowBox[{
+    RowBox[{"Floor", "[", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"Mod", "[", 
+        RowBox[{
+         RowBox[{"b", "*", "i"}], ",", 
+         RowBox[{
+          RowBox[{"b", "*", "s"}], "+", "t"}]}], "]"}], ")"}], "/", "b"}], 
+     "]"}], ",", 
+    RowBox[{"2", "*", "s"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.604015250459578*^9, 3.604015299958343*^9}}],
+
+Cell["position in the block for y", "Text",
+ CellChangeTimes->{{3.6040335121838617`*^9, 3.6040335125965757`*^9}, {
+   3.604033622471459*^9, 3.604033647955022*^9}, {3.604073838269249*^9, 
+   3.604073839330872*^9}, 3.604074701140357*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"\[Delta]", "[", 
+   RowBox[{"s_", ",", "b_", ",", "t_", ",", "i_"}], "]"}], ":=", 
+  RowBox[{"Mod", "[", 
+   RowBox[{
+    RowBox[{"Mod", "[", 
+     RowBox[{"i", ",", 
+      RowBox[{
+       RowBox[{"b", "*", "s"}], "+", "t"}]}], "]"}], ",", "b"}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.6040156392620792`*^9, 3.6040156705752487`*^9}}],
+
+Cell[TextData[{
+ "checks which of the first Ceiling[t/b] cache-blocks of y got evicted ",
+ StyleBox["after",
+  FontVariations->{"Underline"->True}],
+ " y has passed there (the first time & before the second time)"
+}], "Text",
+ CellChangeTimes->{{3.604033765495618*^9, 3.604033832136716*^9}, {
+  3.6040338748920603`*^9, 3.60403388068434*^9}, {3.6040339240309353`*^9, 
+  3.604033927214528*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"A", "[", 
+   RowBox[{"s_", ",", "b_", ",", "t_"}], "]"}], ":=", 
+  RowBox[{"Sum", "[", 
+   RowBox[{
+    RowBox[{"Theta", "[", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{"KroneckerDelta", "[", 
+        RowBox[{
+         RowBox[{"\[Beta]", "[", 
+          RowBox[{"s", ",", "b", ",", "t", ",", "i"}], "]"}], ",", 
+         RowBox[{"s", "+", "j"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"j", "+", "1"}], ")"}], "*", "b"}], "-", "1"}], ",", 
+         RowBox[{
+          RowBox[{"b", "*", "s"}], "+", "t", "-", "1"}]}], "}"}]}], "]"}], 
+     "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "0", ",", 
+      RowBox[{
+       RowBox[{"Ceiling", "[", 
+        RowBox[{"t", "/", "b"}], "]"}], "-", "1"}]}], "}"}]}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.6040331398310204`*^9, 3.604033197017172*^9}, {
+  3.604033421874592*^9, 3.604033429835825*^9}, {3.604038012330122*^9, 
+  3.604038012466043*^9}, {3.604038143330027*^9, 3.6040381435684557`*^9}, {
+  3.604038185040929*^9, 3.604038203484675*^9}, {3.604038237458497*^9, 
+  3.604038237580072*^9}, {3.604038329583644*^9, 3.604038329688924*^9}}],
+
+Cell[TextData[{
+ "checks which of the cache-blocks containing the last t elements of y got \
+evicted ",
+ StyleBox["after",
+  FontVariations->{"Underline"->True}],
+ " has passed there (the first time & before the second time)"
+}], "Text",
+ CellChangeTimes->{{3.604033835163892*^9, 3.604033930915531*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"B", "[", 
+   RowBox[{"s_", ",", "b_", ",", "t_"}], "]"}], ":=", 
+  RowBox[{"Sum", "[", 
+   RowBox[{
+    RowBox[{"Theta", "[", 
+     RowBox[{"Sum", "[", 
+      RowBox[{
+       RowBox[{"KroneckerDelta", "[", 
+        RowBox[{
+         RowBox[{"\[Beta]", "[", 
+          RowBox[{"s", ",", "b", ",", "t", ",", "i"}], "]"}], ",", "j"}], 
+        "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", 
+         RowBox[{"Min", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"b", "*", 
+             RowBox[{"(", 
+              RowBox[{"s", "+", "j", "+", "1"}], ")"}]}], "-", "1"}], ",", 
+           " ", 
+           RowBox[{
+            RowBox[{"b", "*", "s"}], "+", "t", "-", "1"}]}], "]"}], ",", 
+         RowBox[{
+          RowBox[{"2", "*", "b", "*", "s"}], "+", "t", "-", "1"}]}], "}"}]}], 
+      "]"}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"j", ",", "0", ",", 
+      RowBox[{
+       RowBox[{"Ceiling", "[", 
+        RowBox[{"t", "/", "b"}], "]"}], "-", "1"}]}], "}"}]}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.604033199089312*^9, 3.6040332241748343`*^9}, {
+  3.604033457767181*^9, 3.604033458042408*^9}, {3.604038028344262*^9, 
+  3.6040380312835293`*^9}, {3.604038161570973*^9, 3.604038163690646*^9}, {
+  3.604038342683733*^9, 3.6040383457554398`*^9}}],
+
+Cell["checks for x and y being in the same cache - block", "Text",
+ CellChangeTimes->{{3.604033934732976*^9, 3.604033982998515*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"F", "[", 
+   RowBox[{"s_", ",", "b_", ",", "t_"}], "]"}], ":=", 
+  RowBox[{"Sum", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"KroneckerDelta", "[", 
+      RowBox[{
+       RowBox[{"\[Alpha]", "[", 
+        RowBox[{"s", ",", "b", ",", "t", ",", "i"}], "]"}], ",", 
+       RowBox[{"\[Beta]", "[", 
+        RowBox[{"s", ",", "b", ",", "t", ",", 
+         RowBox[{"i", "-", "1"}]}], "]"}]}], "]"}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       RowBox[{"KroneckerDelta", "[", 
+        RowBox[{
+         RowBox[{"\[Delta]", "[", 
+          RowBox[{"s", ",", "b", ",", "t", ",", "i"}], "]"}], ",", "0"}], 
+        "]"}]}], ")"}]}], ",", 
+    RowBox[{"{", 
+     RowBox[{"i", ",", "1", ",", 
+      RowBox[{
+       RowBox[{"2", "*", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"b", "*", "s"}], " ", "+", " ", "t"}], ")"}]}], "-", 
+       "1"}]}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.60403325329315*^9, 3.6040332926947527`*^9}, {
+  3.604038268723024*^9, 3.604038270554199*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["miss rate:", "Subsubsection",
+ CellChangeTimes->{{3.604033985570363*^9, 3.6040340001234093`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"M", "[", 
+   RowBox[{"s_", ",", "b_", ",", "t_"}], "]"}], ":=", 
+  RowBox[{"(", 
+   RowBox[{"s", " ", "+", " ", 
+    RowBox[{"Ceiling", "[", 
+     RowBox[{"t", "/", "b"}], "]"}], "+", " ", 
+    RowBox[{"A", "[", 
+     RowBox[{"s", ",", "b", ",", "t"}], "]"}], "+", 
+    RowBox[{"B", "[", 
+     RowBox[{"s", ",", "b", ",", "t"}], "]"}], "+", 
+    RowBox[{"F", "[", 
+     RowBox[{"s", ",", "b", ",", "t"}], "]"}]}], ")"}]}]], "Input",
+ CellChangeTimes->{{3.604068002080907*^9, 3.604068034003428*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Mrate", "[", 
+   RowBox[{"s_", ",", "b_", ",", "t_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"1", "/", 
+    RowBox[{"(", 
+     RowBox[{"2", "*", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"b", "*", "s"}], " ", "+", " ", "t"}], ")"}]}], ")"}]}], "*", 
+   
+   RowBox[{"M", "[", 
+    RowBox[{"s", ",", "b", ",", "t"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.604015543881288*^9, 3.604015636955084*^9}, {
+  3.604015677233304*^9, 3.6040156858275747`*^9}, {3.604015975874161*^9, 
+  3.604016016927388*^9}, {3.6040314611361856`*^9, 3.60403146130125*^9}, {
+  3.604031749398098*^9, 3.60403191067906*^9}, {3.604033232200877*^9, 
+  3.6040332503990088`*^9}, {3.604033297916551*^9, 3.60403330357782*^9}, {
+  3.604067995408023*^9, 3.604068021944386*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"H", "[", 
+   RowBox[{"s_", ",", "b_", ",", "t_"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{"2", "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"b", "*", "s"}], " ", "+", " ", "t"}], ")"}]}], ")"}], "-", 
+   RowBox[{"(", 
+    RowBox[{"s", " ", "+", " ", 
+     RowBox[{"Ceiling", "[", 
+      RowBox[{"t", "/", "b"}], "]"}], "+", " ", 
+     RowBox[{"A", "[", 
+      RowBox[{"s", ",", "b", ",", "t"}], "]"}], "+", 
+     RowBox[{"B", "[", 
+      RowBox[{"s", ",", "b", ",", "t"}], "]"}], "+", 
+     RowBox[{"F", "[", 
+      RowBox[{"s", ",", "b", ",", "t"}], "]"}]}], ")"}]}]}]], "Input",
+ CellChangeTimes->{{3.604066715710925*^9, 3.6040667653988323`*^9}, {
+  3.6040668483185787`*^9, 3.60406685102107*^9}, {3.604067076928013*^9, 
+  3.6040671247461767`*^9}, {3.604067326673826*^9, 3.604067334606161*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Msimpleminded", "[", 
+    RowBox[{"s_", ",", "b_", ",", "t_"}], "]"}], ":=", 
+   RowBox[{"s", "+", 
+    RowBox[{"3", "*", 
+     RowBox[{"Ceiling", "[", 
+      RowBox[{"t", "/", "b"}], "]"}]}]}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6040680546224833`*^9, 3.604068076349757*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["testing", "Section",
+ CellChangeTimes->{{3.604070994772024*^9, 3.604070996763253*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"H", "[", 
+         RowBox[{"s", ",", "b", ",", "t"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"b", ",", "1", ",", "9"}], "}"}]}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"t", ",", "0", ",", 
+        RowBox[{"s", "-", "1"}]}], "}"}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"s", ",", "2", ",", "9"}], "}"}]}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.604071005452024*^9, 3.604071034653693*^9}, {
+  3.604071066652672*^9, 3.6040710722852993`*^9}, {3.6040747751648417`*^9, 
+  3.604074777173243*^9}, {3.604074879558516*^9, 3.604074880162875*^9}, {
+  3.604075100051495*^9, 3.604075107059222*^9}, {3.6040751932932587`*^9, 
+  3.604075220051629*^9}, {3.604075296302923*^9, 3.6040753174692783`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Table", "[", 
+   RowBox[{
+    RowBox[{"Table", "[", 
+     RowBox[{
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"M", "[", 
+          RowBox[{"s", ",", "b", ",", "t"}], "]"}], "\[Equal]", 
+         RowBox[{"Msimpleminded", "[", 
+          RowBox[{"s", ",", "b", ",", "t"}], "]"}]}], ",", 
+        RowBox[{"{", 
+         RowBox[{"t", ",", "0", ",", 
+          RowBox[{"b", "-", "1"}]}], "}"}]}], "]"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"b", ",", "1", ",", "s"}], "}"}]}], "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{"s", ",", "2", ",", "9"}], "}"}]}], "]"}], ";"}]], "Input",
+ CellChangeTimes->{{3.604066768728005*^9, 3.60406679211771*^9}, {
+   3.604066865030035*^9, 3.604066957331019*^9}, {3.604067047501124*^9, 
+   3.604067047576311*^9}, {3.604067315165164*^9, 3.604067315250276*^9}, {
+   3.604067493465996*^9, 3.604067493574896*^9}, {3.604067623277462*^9, 
+   3.604067623444579*^9}, {3.6040676869339037`*^9, 3.604067729936681*^9}, {
+   3.6040677617492313`*^9, 3.60406776186309*^9}, {3.604067813196589*^9, 
+   3.604067813301062*^9}, {3.6040679437327347`*^9, 3.604067943819632*^9}, 
+   3.604068040544458*^9, {3.604068080365918*^9, 3.6040680935258083`*^9}, {
+   3.604070635063324*^9, 3.604070780694663*^9}, 3.6040747198620777`*^9, {
+   3.6040752417031612`*^9, 3.6040752461837273`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"s", " ", "=", " ", "0"}], ",", 
+   RowBox[{"s", " ", "<", " ", "30"}], ",", " ", 
+   RowBox[{"s", "++"}], ",", 
+   RowBox[{"For", "[", 
+    RowBox[{
+     RowBox[{"b", "=", "1"}], ",", 
+     RowBox[{"b", "\[LessEqual]", "s"}], ",", 
+     RowBox[{"b", "++"}], ",", 
+     RowBox[{"For", "[", 
+      RowBox[{
+       RowBox[{"t", "=", "0"}], ",", 
+       RowBox[{"t", "\[LessEqual]", "b"}], ",", 
+       RowBox[{"t", "++"}], ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"M", "[", 
+           RowBox[{"s", ",", "b", ",", "t"}], "]"}], "==", 
+          RowBox[{"Msimpleminded", "[", 
+           RowBox[{"s", ",", "b", ",", "t"}], "]"}]}], ",", ",", 
+         RowBox[{"Print", "[", "\"\<Fail\>\"", "]"}]}], "]"}]}], "]"}]}], 
+    "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.6040709000460587`*^9, 3.604070979398404*^9}, {
+  3.604071240965062*^9, 3.604071344293441*^9}, {3.604071439797167*^9, 
+  3.604071449024316*^9}}],
+
+Cell[BoxData["$Aborted"], "Output",
+ CellChangeTimes->{3.604075146294284*^9}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{747, 1147},
+WindowMargins->{{Automatic, -7}, {Automatic, -7}},
+ShowSelection->True,
+FrontEndVersion->"9.0 for Linux x86 (64-bit) (February 7, 2013)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 103, 1, 81, "Section"],
+Cell[685, 25, 130, 3, 31, "Text"],
+Cell[818, 30, 339, 8, 32, "Input"],
+Cell[1160, 40, 99, 1, 31, "Text"],
+Cell[1262, 43, 669, 19, 32, "Input"],
+Cell[1934, 64, 99, 1, 31, "Text"],
+Cell[2036, 67, 525, 16, 32, "Input"],
+Cell[2564, 85, 235, 3, 31, "Text"],
+Cell[2802, 90, 374, 11, 32, "Input"],
+Cell[3179, 103, 392, 8, 51, "Text"],
+Cell[3574, 113, 1248, 33, 77, "Input"],
+Cell[4825, 148, 303, 7, 51, "Text"],
+Cell[5131, 157, 1323, 37, 99, "Input"],
+Cell[6457, 196, 132, 1, 31, "Text"],
+Cell[6592, 199, 1042, 30, 77, "Input"],
+Cell[CellGroupData[{
+Cell[7659, 233, 103, 1, 35, "Subsubsection"],
+Cell[7765, 236, 533, 14, 55, "Input"],
+Cell[8301, 252, 785, 19, 32, "Input"],
+Cell[9089, 273, 855, 22, 77, "Input"],
+Cell[9947, 297, 328, 9, 32, "Input"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10324, 312, 92, 1, 81, "Section"],
+Cell[10419, 315, 884, 21, 32, "Input"],
+Cell[11306, 338, 1360, 29, 55, "Input"],
+Cell[CellGroupData[{
+Cell[12691, 371, 1013, 27, 99, "Input"],
+Cell[13707, 400, 77, 1, 32, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

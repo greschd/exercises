@@ -1,0 +1,8 @@
+CC     = gcc
+# GCC architecture flags
+AFLAGS = -m64 -march=core2 -fno-tree-vectorize 
+# GCC debugging flags
+DFLAGS = -g -Wall
+CFLAGS = -O3 -DMEASURE $(AFLAGS) 
+LIBS   = -lm
+OBJDUMP = objdump -d

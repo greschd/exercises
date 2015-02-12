@@ -1,0 +1,22 @@
+Fastcode - HW03
+
+################### E1 #####################
+Points: 10+10+9
+	(a) Your equation models the cache in a way. That was not intended, but will do for this
+	exercise.
+	(c) There are actually 25 iterations, since u start from 1.
+---------------- Comments ---------------
+
+################### E2 #####################
+Points: 24
+---------------- Comments ---------------
+Task c) This is a write-back/write-allocate cache, so the write-backs only happen in case the value of y is replaced in cache by some other value. There are 6 evictions of the values of y and there are altogether memory 31 reads (36 accesses - 5 hits on y), therefore the operational intensity is 24/(31+6)*8 = 0.08 f/B. (-4 points)
+Task d) L2 cache only matters when there are misses in L1 cache. Therefore in the cases when y gets a hit in the L1 cache, we never access L2 as there is no need to do so. That means that there are fewer accesses to the L2 cache, namely 36 - 5 = 31 access, and the miss rate is 10/31 = 31%. (-3 points)
+Task e) Given that in this case there are no evictions, we also never perform write-backs of y. (-2 points)
+################### E3 #####################
+Points: 30
+---------------- Comments ---------------
+
+################ Neatness ##################
+Points: 5
+---------------- Comments ---------------
